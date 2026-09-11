@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورود | رزرو نوبت</title>
+
+    <script src="js/config.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+
+            <a href="index.html" class="flex items-center gap-2 shrink-0">
+                <div class="w-10 h-10 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-xl flex items-center justify-center text-white text-xl shadow-md shadow-teal-200 dark:shadow-teal-900/50">
+                    🏥
+                </div>
+                <div class="hidden sm:block">
+                    <p class="font-bold leading-tight">رزرو نوبت</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-tight">سیستم آنلاین پزشکان</p>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-2">
+                <button id="themeToggle" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition text-lg">
+                    <span class="dark:hidden">🌙</span>
+                    <span class="hidden dark:inline">☀️</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN ==================== -->
+    <main class="flex-1 flex items-center justify-center px-4 py-10">
+
+        <div class="w-full max-w-md">
+
+            <!-- Card -->
+            <div class="bg-white dark:bg-slate-800 rounded-3xl p-8 border border-slate-100 dark:border-slate-700 shadow-lg">
+
+                <!-- Icon -->
+                <div class="flex justify-center mb-5">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-3xl text-white shadow-lg shadow-teal-200 dark:shadow-teal-900/50">
+                        👤
+                    </div>
+                </div>
+
+                <!-- Title -->
+                <h1 class="text-xl font-bold text-center mb-2">ورود / ثبت‌نام</h1>
+                <p class="text-sm text-slate-500 dark:text-slate-400 text-center mb-8">
+                    برای ادامه، شماره موبایل خود را وارد کنید
+                </p>
+
+                <!-- Form -->
+                <form action="password.html" method="get">
+
+                    <!-- Phon --> 
+                    <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 focus-within:border-teal-500 transition">
+                        <!-- Input (goes to right in RTL) -->
+                        <input type="tel"
+                            name="phone"
+                            placeholder="۰۹۱۲۳۴۵۶۷۸۹"
+                            maxlength="11"
+                            class="flex-1 bg-transparent py-3 focus:outline-none text-slate-800 dark:text-slate-100 placeholder-slate-400">
+
+                        <!-- +98 prefix (goes to left in RTL) -->
+                        <span class="text-slate-500 dark:text-slate-400 text-sm border-r border-slate-200 dark:border-slate-700 pr-3">🇮🇷 +98</span>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" style="margin-top: 25px;"
+                            class="w-full bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-bold py-4 rounded-xl hover:shadow-lg hover:shadow-teal-200 dark:hover:shadow-teal-900/50 transition">
+                        ادامه
+                    </button>
+
+                </form>
+
+                <!-- Terms -->
+                <label class="flex items-start gap-3 mt-6 cursor-pointer select-none">
+                    <input type="checkbox" required
+                        class="peer sr-only">
+
+                    <!-- Custom checkbox -->
+                    <span class="shrink-0 w-5 h-5 mt-0.5 rounded-md border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 flex items-center justify-center transition
+                                peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:border-transparent">
+                        <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </span>
+
+                    <span class="text-xs text-slate-500 dark:text-slate-400 leading-6">
+                        با ثبت‌نام،
+                        <a href="#" class="text-teal-600 dark:text-teal-400 hover:underline">قوانین و مقررات</a>
+                        را می‌پذیرم.
+                    </span>
+                </label>
+
+            </div>
+
+            <!-- Back to home -->
+            <div class="text-center mt-6">
+                <a href="index.html" class="text-sm text-slate-500 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 transition">
+                    ← بازگشت به صفحه اصلی
+                </a>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
