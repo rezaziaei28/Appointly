@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -5,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>کد تایید | رزرو نوبت</title>
 
-    <script src="js/config.js"></script>
+    <script src="{% static 'js/config.js' %}"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
@@ -18,7 +19,7 @@
     <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
 
-            <a href="index.html" class="flex items-center gap-2 shrink-0">
+            <a href="{% url 'booking:home' %}" class="flex items-center gap-2 shrink-0">
                 <div class="w-10 h-10 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-xl flex items-center justify-center text-white text-xl shadow-md shadow-teal-200 dark:shadow-teal-900/50">
                     🏥
                 </div>
@@ -64,7 +65,7 @@
                         <span class="text-xl">📱</span>
                         <span class="text-sm font-semibold" dir="ltr">09123456789</span>
                     </div>
-                    <a href="login.html" class="text-xs text-teal-600 dark:text-teal-400 hover:underline font-semibold">
+                    <a href="{% url 'accounts:login' %}" class="text-xs text-teal-600 dark:text-teal-400 hover:underline font-semibold">
                         ویرایش
                     </a>
                 </div>
@@ -76,13 +77,13 @@
                         <span class="text-xs font-bold text-amber-700 dark:text-amber-400">حالت دمو</span>
                     </div>
                     <p class="text-xs text-amber-700 dark:text-amber-400 leading-6">
-                        کد شما: <span class="font-bold tracking-widest text-base" dir="ltr">123456</span>
+                        کد شما: <span class="font-bold tracking-widest text-base" dir="ltr">{{otp}}</span>
                     </p>
                 </div>
 
                 <!-- Form -->
-                <form action="register.html" method="get">
-
+                <form action="{% url 'accounts:register' %}" method="post">
+                    {% csrf_token %}
                     <!-- OTP inputs -->
                     <label class="block text-sm font-semibold mb-3">کد تایید</label>
                     <div class="grid grid-cols-6 gap-2 mb-6" dir="ltr">
@@ -108,7 +109,7 @@
                             class="text-slate-500 dark:text-slate-400 cursor-not-allowed">
                         ⏱ ارسال مجدد تا ۰:۵۹
                     </button>
-                    <a href="login.html" class="text-teal-600 dark:text-teal-400 hover:underline font-semibold">
+                    <a href="{% url 'accounts:login' %}" class="text-teal-600 dark:text-teal-400 hover:underline font-semibold">
                         ویرایش شماره
                     </a>
                 </div>
@@ -117,7 +118,7 @@
 
             <!-- Back to login -->
             <div class="text-center mt-6">
-                <a href="login.html" class="text-sm text-slate-500 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 transition">
+                <a href="{% url 'accounts:login' %}" class="text-sm text-slate-500 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 transition">
                     ← بازگشت به ورود
                 </a>
             </div>
@@ -126,6 +127,6 @@
 
     </main>
 
-    <script src="js/app.js"></script>
+    <script src="{% static 'js/app.js' %}"></script>
 </body>
 </html>
