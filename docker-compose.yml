@@ -12,3 +12,16 @@ services:
     environment:
       - SECRET_KEY=test
       - DEBUG=True
+
+  db:
+    image: docker.arvancloud.ir/postgres:15
+    container_name: appointly_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=appointly_db
+      - POSTGRES_USER=appointly_user
+      - POSTGRES_PASSWORD=appointly_password
+
+volumes:
+  postgres_data:

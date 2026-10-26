@@ -143,10 +143,23 @@ MAILERS = {
     },
 }
 
+# Tell Django to use the custom User model in the accounts app
+AUTH_USER_MODEL = 'accounts.User'
 
 # rest framework settings
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ]
+}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('POSTGRES_DB', default='appointly_db'),
+        'USER': config('POSTGRES_USER', default='appointly_user'),
+        'PASSWORD': config('POSTGRES_PASSWORD', default='appointly_password'),
+        'HOST': 'db', # Name of the service in docker compose
+        'PORT': '5432',
+    }
 }

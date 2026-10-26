@@ -15,7 +15,12 @@ RUN pip install --upgrade pip
 COPY requirements.txt /app/
 
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Use Chabokan mirror because Docker Hub and PyPI are not available in Iran
+# Remove this and use the default PyPI when you have a DNS
+RUN pip install --no-cache-dir -r requirements.txt \
+    --index-url https://mirror2.chabokan.net/pypi/simple/ \
+    --trusted-host mirror2.chabokan.net
+
 
 # Copy the rest of the project
 COPY core /app/
