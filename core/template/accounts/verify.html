@@ -63,7 +63,7 @@
                 <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 mb-6">
                     <div class="flex items-center gap-3">
                         <span class="text-xl">📱</span>
-                        <span class="text-sm font-semibold" dir="ltr">09123456789</span>
+                        <span class="text-sm font-semibold" dir="ltr">{{ phone_number }}</span>
                     </div>
                     <a href="{% url 'accounts:login' %}" class="text-xs text-teal-600 dark:text-teal-400 hover:underline font-semibold">
                         ویرایش
@@ -105,9 +105,8 @@
 
                 <!-- Resend -->
                 <div class="flex items-center justify-between mt-6 text-xs">
-                    <button type="button"
-                            class="text-slate-500 dark:text-slate-400 cursor-not-allowed">
-                        ⏱ ارسال مجدد تا ۰:۵۹
+                    <button type="button" id="resend-btn" class="text-slate-500 dark:text-slate-400 cursor-not-allowed" disabled>
+                        ⏱ ارسال مجدد تا <span id="timer">02:00</span>
                     </button>
                     <a href="{% url 'accounts:login' %}" class="text-teal-600 dark:text-teal-400 hover:underline font-semibold">
                         ویرایش شماره

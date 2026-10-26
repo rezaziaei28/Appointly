@@ -141,4 +141,33 @@ document.addEventListener('DOMContentLoaded', () => {
         otpInputs[0].focus();
     }
 
+    // --------------------------------------------------------
+    // OTP RESEND TIMER (2 minutes)
+    // --------------------------------------------------------
+    const timerElement = document.getElementById('timer');
+    const resendBtn = document.getElementById('resend-btn');
+    if (timerElement && resendBtn) {
+        let timeLeft = 120; // 2 minutes in seconds
+        resendBtn.disabled = true;
+        resendBtn.classList.add('cursor-not-allowed');
+        
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            
+            // Format time to 02:00
+            timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                resendBtn.innerHTML = `<a href="/accounts/login/" class="text-teal-600 hover:underline">ارسال مجدد کد</a>`;
+                resendBtn.disabled = false;
+                resendBtn.classList.remove('cursor-not-allowed', 'text-slate-500');
+                resendBtn.classList.add('text-teal-600', 'hover:underline');
+            }
+            timeLeft--;
+        }, 1000);
+    }
+
+
 });
