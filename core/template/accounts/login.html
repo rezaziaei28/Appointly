@@ -42,7 +42,18 @@
     <main class="flex-1 flex items-center justify-center px-4 py-10">
 
         <div class="w-full max-w-md">
-
+            {% if messages %}
+            <div class="mb-4 space-y-2">
+                {% for message in messages %}
+                    <div class="px-4 py-3 rounded-xl text-sm font-semibold text-center border
+                        {% if message.tags == 'error' %} bg-red-50 border-red-200 text-red-600 dark:bg-red-500/10 dark:border-red-500/30 dark:text-red-400
+                        {% elif message.tags == 'success' %} bg-teal-50 border-teal-200 text-teal-600 dark:bg-teal-500/10 dark:border-teal-500/30 dark:text-teal-400
+                        {% else %} bg-slate-50 border-slate-200 text-slate-600 {% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
             <!-- Card -->
             <div class="bg-white dark:bg-slate-800 rounded-3xl p-8 border border-slate-100 dark:border-slate-700 shadow-lg">
 

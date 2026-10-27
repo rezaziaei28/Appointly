@@ -41,8 +41,20 @@
     <!-- ==================== MAIN ==================== -->
     <main class="flex-1 flex items-center justify-center px-4 py-10">
 
+        
         <div class="w-full max-w-md">
-
+            {% if messages %}
+                <div class="mb-4 space-y-2">
+                    {% for message in messages %}
+                        <div class="px-4 py-3 rounded-xl text-sm font-semibold text-center border
+                            {% if message.tags == 'error' %} bg-red-50 border-red-200 text-red-600 dark:bg-red-500/10 dark:border-red-500/30 dark:text-red-400
+                            {% elif message.tags == 'success' %} bg-teal-50 border-teal-200 text-teal-600 dark:bg-teal-500/10 dark:border-teal-500/30 dark:text-teal-400
+                            {% else %} bg-slate-50 border-slate-200 text-slate-600 {% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
             <!-- Card -->
             <div class="bg-white dark:bg-slate-800 rounded-3xl p-8 border border-slate-100 dark:border-slate-700 shadow-lg">
 
@@ -82,17 +94,21 @@
                 </div>
 
                 <!-- Form -->
-                <form action="{% url 'accounts:register' %}" method="post">
+                <form action="{% url 'accounts:verify' %}" method="post">
                     {% csrf_token %}
+
+                    <!-- Hidden input for phone number -->
+                    <input type="hidden" name="phone_number" value="{{ phone_number }}">
+                    
                     <!-- OTP inputs -->
                     <label class="block text-sm font-semibold mb-3">کد تایید</label>
                     <div class="grid grid-cols-6 gap-2 mb-6" dir="ltr">
-                        <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-full aspect-square text-center text-lg font-bold bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-teal-500 focus:outline-none transition text-slate-800 dark:text-slate-100">
-                        <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-full aspect-square text-center text-lg font-bold bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-teal-500 focus:outline-none transition text-slate-800 dark:text-slate-100">
-                        <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-full aspect-square text-center text-lg font-bold bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-teal-500 focus:outline-none transition text-slate-800 dark:text-slate-100">
-                        <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-full aspect-square text-center text-lg font-bold bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-teal-500 focus:outline-none transition text-slate-800 dark:text-slate-100">
-                        <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-full aspect-square text-center text-lg font-bold bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-teal-500 focus:outline-none transition text-slate-800 dark:text-slate-100">
-                        <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-full aspect-square text-center text-lg font-bold bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-teal-500 focus:outline-none transition text-slate-800 dark:text-slate-100">
+                        <input type="text" name="otp" maxlength="1" inputmode="numeric" class="otp-input w-full aspect-square text-center text-lg font-bold bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-teal-500 focus:outline-none transition text-slate-800 dark:text-slate-100">
+                        <input type="text" name="otp" maxlength="1" inputmode="numeric" class="otp-input w-full aspect-square text-center text-lg font-bold bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-teal-500 focus:outline-none transition text-slate-800 dark:text-slate-100">
+                        <input type="text" name="otp" maxlength="1" inputmode="numeric" class="otp-input w-full aspect-square text-center text-lg font-bold bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-teal-500 focus:outline-none transition text-slate-800 dark:text-slate-100">
+                        <input type="text" name="otp" maxlength="1" inputmode="numeric" class="otp-input w-full aspect-square text-center text-lg font-bold bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-teal-500 focus:outline-none transition text-slate-800 dark:text-slate-100">
+                        <input type="text" name="otp" maxlength="1" inputmode="numeric" class="otp-input w-full aspect-square text-center text-lg font-bold bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-teal-500 focus:outline-none transition text-slate-800 dark:text-slate-100">
+                        <input type="text" name="otp" maxlength="1" inputmode="numeric" class="otp-input w-full aspect-square text-center text-lg font-bold bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-teal-500 focus:outline-none transition text-slate-800 dark:text-slate-100">
                     </div>
 
                     <!-- Submit -->
