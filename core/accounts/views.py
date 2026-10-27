@@ -85,7 +85,35 @@ class RegisterView(TemplateView):
         return render(request, self.template_name)
 
     def post(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        national_id = request.POST.get('national_id')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        
+        if not first_name or not last_name:
+            # check importing first_name and last_name
+            messages.error(request, "نام و نام خانوادگی الزامی است")
+            return render(request, self.template_name)
+
+        if password != confirm_password:
+            messages.error(request, "رمز عبور و تکرار آن یکسان نیستند")
+            return render(request, self.template_name)
+
+        # Update user password
+        if password:
+            request.user.set_password(password)
+            request.user.save()
+
+        # Create or update profile
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        profile.first_name = first_name
+        profile.last_name = last_name
+        profile.national_id = national_id
+        profile.save()
+
+        messages.success(request, "اطلاعات با موفقیت ثبت شد")
+        return redirect('panel:panel')
 
 class ForgotView(TemplateView):
     template_name = 'accounts/forgot.html'
