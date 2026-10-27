@@ -104,6 +104,7 @@ class RegisterView(TemplateView):
         if password:
             request.user.set_password(password)
             request.user.save()
+            login(request, request.user)
 
         # Create or update profile
         profile, created = Profile.objects.get_or_create(user=request.user)

@@ -163,3 +163,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+# Redirect to this URL if user is not logged in
+LOGIN_URL = 'accounts:login'
