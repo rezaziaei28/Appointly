@@ -1,7 +1,12 @@
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.contrib import messages
-from .models import OTP
+from django.shortcuts import redirect
+from django.contrib.auth import login
+from django.utils import timezone
+from datetime import timedelta
+
+from .models import OTP, User, Profile
 # Create your views here.
 
 
@@ -39,8 +44,39 @@ class VerifyView(TemplateView):
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
 
-    def post(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+    def post(self, request):
+        phone_number = request.POST.get('phone_number')
+        otp_digits = request.POST.getlist('otp') 
+        otp_code = "".join(otp_digits)
+
+        if not phone_number or len(otp_code) != 6:
+            messages.error(request, "کد وارد شده نامعتبر است")
+            return render(request, self.template_name, {'phone_number': phone_number})
+
+        try:
+            otp_obj = OTP.objects.get(phone_number=phone_number, code=otp_code, is_used=False)
+        except OTP.DoesNotExist:
+            messages.error(request, "کد تایید اشتباه است")
+            return render(request, self.template_name, {'phone_number': phone_number})
+
+        time_threshold = timezone.now() - timedelta(minutes=2)
+        if otp_obj.created_at < time_threshold:
+            otp_obj.delete()
+            messages.error(request, "کد تایید منقضی شده است")
+            return render(request, self.template_name, {'phone_number': phone_number})
+
+        user, created = User.objects.get_or_create(phone_number=phone_number)
+
+        otp_obj.is_used = True
+        otp_obj.save()
+
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+        # If it's a new user, send them to complete their profile
+        if created:
+            return redirect('accounts:register') 
+        
+        return redirect('accounts:register') 
 
 class RegisterView(TemplateView):
     template_name = 'accounts/register.html'
