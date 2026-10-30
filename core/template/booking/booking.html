@@ -1,15 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رزرو نوبت | دکتر احمدی</title>
+    <title>دکتر {{ doctor.first_name }} {{ doctor.last_name }} | رزرو نوبت</title>
 
     <script src="js/config.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
@@ -72,7 +73,7 @@
             <span>/</span>
             <a href="index.html#doctors" class="hover:text-teal-600 dark:hover:text-teal-400">پزشکان</a>
             <span>/</span>
-            <a href="doctor.html" class="hover:text-teal-600 dark:hover:text-teal-400">دکتر احمدی</a>
+            <a href="{% url 'booking:doctor_detail' pk=doctor.id %}" class="hover:text-teal-600 dark:hover:text-teal-400">دکتر {{ doctor.first_name }} {{ doctor.last_name }}</a>
             <span>/</span>
             <span class="text-slate-800 dark:text-slate-200 font-medium">رزرو نوبت</span>
         </nav>
@@ -83,12 +84,12 @@
 
         <!-- Doctor mini card -->
         <div class="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm mb-6 flex items-center gap-4">
-            <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=200"
-                 alt="دکتر احمدی"
+            <img src="{{ doctor.image.url }}"
+                 alt="دکتر {{ doctor.first_name }} {{ doctor.last_name }} "
                  class="w-16 h-16 rounded-2xl object-cover object-top">
             <div class="flex-1">
-                <p class="font-bold">دکتر احمدی</p>
-                <p class="text-sm text-teal-600 dark:text-teal-400 font-semibold">فوق تخصص قلب و عروق</p>
+                <p class="font-bold">دکتر {{ doctor.first_name }} {{ doctor.last_name }}</p>
+                <p class="text-sm text-teal-600 dark:text-teal-400 font-semibold">{{ doctor.specialty }}</p>
             </div>
             <div class="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-xs font-semibold px-2.5 py-1.5 rounded-lg">
                 ⭐ ۴.۸
@@ -236,6 +237,6 @@
         </div>
     </footer>
 
-    <script src="js/app.js"></script>
+    <script src="{% static 'js/app.js' %}"></script>
 </body>
 </html>
