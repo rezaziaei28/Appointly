@@ -96,138 +96,69 @@
             </div>
         </div>
 
-        <!-- ============ STEP 1: Pick day (form #1) ============ -->
+        <!-- DATE SELECTION FORM -->
         <form method="POST" action="" class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700 shadow-sm mb-6">
             {% csrf_token %}
             <h2 class="text-lg font-bold mb-5 flex items-center gap-2">
                 <span>📅</span> ۱. روز مورد نظر رو انتخاب کن
             </h2>
-
-            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
-
-                <div>
-                    <input type="radio" name="date" value="1404-09-15" id="d-15" class="peer hidden" required>
-                    <label for="d-15" class="block text-center py-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 cursor-pointer transition hover:border-teal-400 dark:hover:border-teal-500 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:border-transparent peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">
-                        <p class="text-[11px] opacity-80">شنبه</p>
-                        <p class="text-lg font-bold">۱۵</p>
-                        <p class="text-[11px] opacity-80">آذر</p>
+            
+            <div class="flex gap-2 overflow-x-auto pb-4 snap-x">
+                {% for date in dates %}
+                <div class="snap-start shrink-0">
+                    <input type="radio" name="date" value="{{ date|date:'Y-m-d' }}" id="date-{{ forloop.counter }}" class="peer hidden" {% if not selected_date or selected_date != date|date:'Y-m-d' %}required{% endif %}>
+                    <label for="date-{{ forloop.counter }}" class="block w-20 text-center py-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 cursor-pointer transition hover:border-teal-400 dark:hover:border-teal-500 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:border-transparent peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">
+                        <p class="text-[11px] opacity-80">{{ date|date:'D' }}</p>
+                        <p class="text-lg font-bold">{{ date|date:'d' }}</p>
+                        <p class="text-[11px] opacity-80">{{ date|date:'M' }}</p>
                     </label>
                 </div>
-
-                <div>
-                    <input type="radio" name="date" value="1404-09-16" id="d-16" class="peer hidden">
-                    <label for="d-16" class="block text-center py-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 cursor-pointer transition hover:border-teal-400 dark:hover:border-teal-500 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:border-transparent peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">
-                        <p class="text-[11px] opacity-80">یکشنبه</p>
-                        <p class="text-lg font-bold">۱۶</p>
-                        <p class="text-[11px] opacity-80">آذر</p>
-                    </label>
-                </div>
-
-                <div>
-                    <input type="radio" name="date" value="1404-09-17" id="d-17" class="peer hidden">
-                    <label for="d-17" class="block text-center py-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 cursor-pointer transition hover:border-teal-400 dark:hover:border-teal-500 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:border-transparent peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">
-                        <p class="text-[11px] opacity-80">دوشنبه</p>
-                        <p class="text-lg font-bold">۱۷</p>
-                        <p class="text-[11px] opacity-80">آذر</p>
-                    </label>
-                </div>
-
-                <div>
-                    <input type="radio" name="date" value="1404-09-18" id="d-18" class="peer hidden">
-                    <label for="d-18" class="block text-center py-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 cursor-pointer transition hover:border-teal-400 dark:hover:border-teal-500 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:border-transparent peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">
-                        <p class="text-[11px] opacity-80">سه‌شنبه</p>
-                        <p class="text-lg font-bold">۱۸</p>
-                        <p class="text-[11px] opacity-80">آذر</p>
-                    </label>
-                </div>
-
-                <div>
-                    <input type="radio" name="date" value="1404-09-19" id="d-19" class="peer hidden">
-                    <label for="d-19" class="block text-center py-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 cursor-pointer transition hover:border-teal-400 dark:hover:border-teal-500 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:border-transparent peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">
-                        <p class="text-[11px] opacity-80">چهارشنبه</p>
-                        <p class="text-lg font-bold">۱۹</p>
-                        <p class="text-[11px] opacity-80">آذر</p>
-                    </label>
-                </div>
-
-                <div>
-                    <input type="radio" name="date" value="1404-09-20" id="d-20" class="peer hidden">
-                    <label for="d-20" class="block text-center py-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 cursor-pointer transition hover:border-teal-400 dark:hover:border-teal-500 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:border-transparent peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">
-                        <p class="text-[11px] opacity-80">پنجشنبه</p>
-                        <p class="text-lg font-bold">۲۰</p>
-                        <p class="text-[11px] opacity-80">آذر</p>
-                    </label>
-                </div>
-
+                {% endfor %}
             </div>
-
-            <button type="submit"
-                    class="w-full mt-5 py-3 rounded-xl bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-semibold hover:shadow-lg hover:shadow-teal-200 dark:hover:shadow-teal-900/50 transition">
+            
+            <button type="submit" class="w-full mt-5 py-3 rounded-xl bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-semibold hover:shadow-lg hover:shadow-teal-200 dark:hover:shadow-teal-900/50 transition">
                 🔍 نمایش ساعت‌های این روز
             </button>
         </form>
 
-        <!-- ============ STEP 2: Pick time (form #2) ============ -->
-        <form method="POST" action="" class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700 shadow-sm">
+        <!-- TIME SELECTION (Only shows if times exist) -->
+        {% if step == 'time' %}
+        <form method="POST" action="{% url 'booking:confirm_appointment' pk=doctor.id %}" class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700 shadow-sm">
             {% csrf_token %}
+            <input type="hidden" name="date" value="{{ selected_date }}">
+            
             <h2 class="text-lg font-bold mb-5 flex items-center gap-2">
                 <span>⏰</span> ۲. ساعت مورد نظر رو انتخاب کن
             </h2>
 
-            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
-
-                <div>
-                    <input type="radio" name="time" value="09:00" id="t-0900" class="peer hidden" required>
-                    <label for="t-0900" class="block text-center py-2.5 rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 text-sm font-semibold cursor-pointer transition hover:bg-teal-100 dark:hover:bg-teal-500/20 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">۰۹:۰۰</label>
+            {% if times or booked_times %}
+                <div class="grid grid-cols-4 sm:grid-cols-6 gap-2 mb-6">
+                    <!-- Available Times -->
+                    {% for time in times %}
+                    <div>
+                        <input type="radio" name="time" value="{{ time }}" id="time-{{ forloop.counter }}" class="peer hidden" required>
+                        <label for="time-{{ forloop.counter }}" class="block text-center py-2.5 rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 text-sm font-semibold cursor-pointer transition hover:bg-teal-100 dark:hover:bg-teal-500/20 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white" dir="ltr">{{ time }}</label>
+                    </div>
+                    {% endfor %}
+                    
+                    <!-- Booked Times -->
+                    {% for time in booked_times %}
+                    <div>
+                        <span class="block text-center py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-400 text-sm font-semibold line-through cursor-not-allowed" dir="ltr">{{ time }}</span>
+                    </div>
+                    {% endfor %}
                 </div>
 
-                <span class="block text-center py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-400 text-sm font-semibold line-through cursor-not-allowed">۰۹:۳۰</span>
-
-                <div>
-                    <input type="radio" name="time" value="10:00" id="t-1000" class="peer hidden">
-                    <label for="t-1000" class="block text-center py-2.5 rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 text-sm font-semibold cursor-pointer transition hover:bg-teal-100 dark:hover:bg-teal-500/20 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">۱۰:۰۰</label>
+                <button type="submit" class="w-full bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-bold py-4 rounded-xl hover:shadow-lg hover:shadow-teal-200 dark:hover:shadow-teal-900/50 transition">
+                    ✅ تایید و ثبت نوبت
+                </button>
+            {% else %}
+                <div class="text-center py-8">
+                    <p class="text-slate-500 dark:text-slate-400">در حال حاضر برای این روز نوبتی تعریف نشده است.</p>
                 </div>
-
-                <div>
-                    <input type="radio" name="time" value="10:30" id="t-1030" class="peer hidden">
-                    <label for="t-1030" class="block text-center py-2.5 rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 text-sm font-semibold cursor-pointer transition hover:bg-teal-100 dark:hover:bg-teal-500/20 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">۱۰:۳۰</label>
-                </div>
-
-                <div>
-                    <input type="radio" name="time" value="11:00" id="t-1100" class="peer hidden">
-                    <label for="t-1100" class="block text-center py-2.5 rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 text-sm font-semibold cursor-pointer transition hover:bg-teal-100 dark:hover:bg-teal-500/20 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">۱۱:۰۰</label>
-                </div>
-
-                <div>
-                    <input type="radio" name="time" value="14:00" id="t-1400" class="peer hidden">
-                    <label for="t-1400" class="block text-center py-2.5 rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 text-sm font-semibold cursor-pointer transition hover:bg-teal-100 dark:hover:bg-teal-500/20 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">۱۴:۰۰</label>
-                </div>
-
-                <div>
-                    <input type="radio" name="time" value="14:30" id="t-1430" class="peer hidden">
-                    <label for="t-1430" class="block text-center py-2.5 rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 text-sm font-semibold cursor-pointer transition hover:bg-teal-100 dark:hover:bg-teal-500/20 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">۱۴:۳۰</label>
-                </div>
-
-                <span class="block text-center py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-400 text-sm font-semibold line-through cursor-not-allowed">۱۵:۰۰</span>
-
-                <div>
-                    <input type="radio" name="time" value="15:30" id="t-1530" class="peer hidden">
-                    <label for="t-1530" class="block text-center py-2.5 rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 text-sm font-semibold cursor-pointer transition hover:bg-teal-100 dark:hover:bg-teal-500/20 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">۱۵:۳۰</label>
-                </div>
-
-                <div>
-                    <input type="radio" name="time" value="16:00" id="t-1600" class="peer hidden">
-                    <label for="t-1600" class="block text-center py-2.5 rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 text-sm font-semibold cursor-pointer transition hover:bg-teal-100 dark:hover:bg-teal-500/20 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">۱۶:۰۰</label>
-                </div>
-
-            </div>
-
-            <button type="submit"
-                    class="w-full mt-6 bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-bold py-4 rounded-xl hover:shadow-lg hover:shadow-teal-200 dark:hover:shadow-teal-900/50 transition">
-                ✅ تایید و ادامه دریافت نوبت
-            </button>
+            {% endif %}
         </form>
-
+        {% endif %}
     </main>
 
     <!-- ==================== FOOTER ==================== -->
