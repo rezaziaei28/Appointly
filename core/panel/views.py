@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
@@ -9,12 +9,16 @@ from accounts.models import Profile
 
 class PanelView(LoginRequiredMixin, TemplateView):
     template_name = 'panel/panel.html'
+    login_url = 'accounts:login' # Redirect to login if not logged in
 
     def get(self, request, *args, **kwargs):
-       # Get the profile
-        profile = get_object_or_404(Profile, user=request.user)
-
-        # Get appointments
+       # Get profile or create it if it doesn't exist
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        
+        # If profile is incomplete (no first name), send to register
+        if not profile.first_name:
+            return redirect('accounts:register')
+        
         appointments = Appointment.objects.filter(patient=request.user).order_by('-date', '-time')
         
         context = {
