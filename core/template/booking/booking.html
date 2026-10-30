@@ -98,7 +98,7 @@
 
         <!-- ============ STEP 1: Pick day (form #1) ============ -->
         <form method="POST" action="" class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700 shadow-sm mb-6">
-
+            {% csrf_token %}
             <h2 class="text-lg font-bold mb-5 flex items-center gap-2">
                 <span>📅</span> ۱. روز مورد نظر رو انتخاب کن
             </h2>
@@ -169,7 +169,7 @@
 
         <!-- ============ STEP 2: Pick time (form #2) ============ -->
         <form method="POST" action="" class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700 shadow-sm">
-
+            {% csrf_token %}
             <h2 class="text-lg font-bold mb-5 flex items-center gap-2">
                 <span>⏰</span> ۲. ساعت مورد نظر رو انتخاب کن
             </h2>
