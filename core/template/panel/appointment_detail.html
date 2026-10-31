@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جزئیات نوبت | رزرو نوبت</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+</head>
+<body class="bg-slate-900/50 backdrop-blur-sm min-h-screen flex items-center justify-center p-4">
+
+    <!-- Modal Overlay -->
+    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 w-full max-w-md shadow-2xl relative">
+        
+        <!-- Close Button -->
+        <a href="{% url 'panel:panel' %}" class="absolute top-4 left-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-500 transition">
+            ✕
+        </a>
+
+        <h2 class="text-xl font-bold mb-6 text-center">جزئیات نوبت</h2>
+
+        <div class="space-y-4">
+            <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl">
+                <span class="text-slate-500 dark:text-slate-400">پزشک:</span>
+                <span class="font-bold">دکتر {{ appointment.doctor.first_name }} {{ appointment.doctor.last_name }}</span>
+            </div>
+            <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl">
+                <span class="text-slate-500 dark:text-slate-400">تخصص:</span>
+                <span class="font-bold">{{ appointment.doctor.specialty }}</span>
+            </div>
+            <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl">
+                <span class="text-slate-500 dark:text-slate-400">تاریخ:</span>
+                <span class="font-bold">{{ appointment.date }}</span>
+            </div>
+            <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl">
+                <span class="text-slate-500 dark:text-slate-400">ساعت:</span>
+                <span class="font-bold" dir="ltr">{{ appointment.time }}</span>
+            </div>
+            <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl">
+                <span class="text-slate-500 dark:text-slate-400">وضعیت:</span>
+                <span class="font-bold text-yellow-600">{{ appointment.status }}</span>
+            </div>
+        </div>
+
+        <a href="{% url 'panel:panel' %}" class="block w-full mt-6 py-3 text-center rounded-xl bg-slate-100 dark:bg-slate-700 font-semibold hover:bg-slate-200 transition">
+            بستن
+        </a>
+    </div>
+</body>
+</html>
