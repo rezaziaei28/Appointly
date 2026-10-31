@@ -133,3 +133,4 @@ class ConfirmAppointmentView(LoginRequiredMixin, TemplateView):
         )
         messages.success(request, "Appointment booked successfully.")
         return redirect('panel:panel')
+

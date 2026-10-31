@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
+from django.contrib import messages
 
 from booking.models import Appointment
 from accounts.models import Profile
@@ -29,3 +30,15 @@ class PanelView(LoginRequiredMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         return render(request, self.template_name)
+
+class AppointmentDetailView(LoginRequiredMixin, TemplateView):
+    def get(self, request, pk, *args, **kwargs):
+        appointment = get_object_or_404(Appointment, pk=pk, patient=request.user)
+        return render(request, 'panel/appointment_detail.html', {'appointment': appointment})
+
+class CancelAppointmentView(LoginRequiredMixin, TemplateView):
+    def post(self, request, pk, *args, **kwargs):
+        appointment = get_object_or_404(Appointment, pk=pk, patient=request.user)
+        appointment.delete()
+        messages.success(request, "نوبت شما با موفقیت لغو شد.")
+        return redirect('panel:panel')
