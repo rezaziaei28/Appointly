@@ -1,8 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.base import TemplateView
 from django.contrib import messages
-from django.shortcuts import redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.utils import timezone
 from datetime import timedelta
 
@@ -133,3 +132,10 @@ class ResetView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         return render(request, self.template_name)
+
+class LogoutView(TemplateView):
+    '''log out user'''
+    
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect('accounts:login')
