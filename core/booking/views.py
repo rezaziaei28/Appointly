@@ -12,7 +12,9 @@ class HomeView(TemplateView):
     template_name = 'booking/index.html'
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        # Fetch all active doctors from the database
+        doctors = Doctor.objects.filter(is_active=True)
+        return render(request, self.template_name, {'doctors': doctors})
 
     def post(self, request, *args, **kwargs):
         return render(request, self.template_name)

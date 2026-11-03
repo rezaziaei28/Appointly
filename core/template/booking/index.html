@@ -120,194 +120,63 @@
                 <h2 class="text-xl sm:text-2xl font-bold">پزشکان برتر</h2>
                 <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">پزشک مورد نظرت رو انتخاب کن</p>
             </div>
-            <a href="#" class="text-sm font-semibold text-teal-600 dark:text-teal-400 hover:text-teal-700">مشاهده همه →</a>
+            <a href="#" class="text-sm font-semibold text-teal-600 dark:text-teal-400 hover:text-teal-700">مشاهده همه ←</a>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Doctor Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-            <!-- Card 1 -->
-            <a href="doctor.html" class="doctor-card block bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300">
-                <div class="relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600" alt="دکتر احمدی" class="w-full h-52 object-cover">
-                    <span class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur text-xs font-semibold text-teal-600 dark:text-teal-400 px-2.5 py-1 rounded-full">
-                        ❤️ قلب و عروق
+            {% for doctor in doctors %}
+            <a href="{% url 'booking:doctor_detail' doctor.id %}" class="doctor-card block bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300">
+                
+                <!-- Image -->
+                <div class="relative overflow-hidden h-40">
+                    {% if doctor.image %}
+                        <img src="{{ doctor.image.url }}" alt="دکتر {{ doctor.last_name }}" class="w-full h-full object-cover">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600" alt="Doctor" class="w-full h-full object-cover">
+                    {% endif %}
+                    <span class="absolute top-2 right-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur text-[10px] font-semibold text-teal-600 dark:text-teal-400 px-2 py-0.5 rounded-full">
+                        {{ doctor.specialty }}
                     </span>
                 </div>
-                <div class="p-5">
-                    <div class="flex items-start justify-between mb-3">
+
+                <!-- Content -->
+                <div class="p-4">
+                    <div class="flex items-start justify-between mb-2">
                         <div>
-                            <h3 class="font-bold">دکتر احمدی</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">فوق تخصص قلب</p>
+                            <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100">دکتر {{ doctor.first_name }} {{ doctor.last_name }}</h3>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{{ doctor.specialty }}</p>
                         </div>
-                        <div class="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-xs font-semibold px-2 py-1 rounded-lg">
+                        <div class="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-[10px] font-semibold px-2 py-1 rounded-lg">
                             ⭐ ۴.۸
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-4">
-                        <span>📍 تهران، ولیعصر</span>
-                        <span>•</span>
-                        <span>۱۵ سال تجربه</span>
-                    </div>
-                    <div class="block text-center w-full bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-semibold py-2.5 rounded-xl">
-                        📅 رزرو نوبت
-                    </div>
-                </div>
-            </a>
 
-            <!-- Card 2 -->
-            <a href="doctor.html" class="doctor-card block bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300">
-                <div class="relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600" alt="دکتر رضایی" class="w-full h-52 object-cover">
-                    <span class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur text-xs font-semibold text-teal-600 dark:text-teal-400 px-2.5 py-1 rounded-full">
-                        🦷 دندانپزشک
-                    </span>
-                </div>
-                <div class="p-5">
-                    <div class="flex items-start justify-between mb-3">
-                        <div>
-                            <h3 class="font-bold">دکتر رضایی</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">متخصص ایمپلنت</p>
-                        </div>
-                        <div class="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-xs font-semibold px-2 py-1 rounded-lg">
-                            ⭐ ۴.۶
-                        </div>
+                    <div class="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400 mb-3">
+                        <span>📍 {{ doctor.address }}</span>
                     </div>
-                    <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-4">
-                        <span>📍 تهران، سعادت‌آباد</span>
-                        <span>•</span>
-                        <span>۱۲ سال تجربه</span>
-                    </div>
-                    <div class="block text-center w-full bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-semibold py-2.5 rounded-xl">
-                        📅 رزرو نوبت
-                    </div>
-                </div>
-            </a>
 
-            <!-- Card 3 -->
-            <a href="doctor.html" class="doctor-card block bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300">
-                <div class="relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=600" alt="دکتر محمدی" class="w-full h-52 object-cover">
-                    <span class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur text-xs font-semibold text-teal-600 dark:text-teal-400 px-2.5 py-1 rounded-full">
-                        ✨ پوست و مو
-                    </span>
-                </div>
-                <div class="p-5">
-                    <div class="flex items-start justify-between mb-3">
-                        <div>
-                            <h3 class="font-bold">دکتر محمدی</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">متخصص پوست و زیبایی</p>
-                        </div>
-                        <div class="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-xs font-semibold px-2 py-1 rounded-lg">
-                            ⭐ ۴.۹
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-4">
-                        <span>📍 تهران، ونک</span>
-                        <span>•</span>
-                        <span>۱۸ سال تجربه</span>
-                    </div>
-                    <div class="block text-center w-full bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-semibold py-2.5 rounded-xl">
+                    <div class="block text-center w-full bg-gradient-to-l from-teal-500 to-cyan-500 text-white text-xs font-semibold py-2 rounded-xl">
                         📅 رزرو نوبت
                     </div>
                 </div>
             </a>
-
-            <!-- Card 4 -->
-            <a href="doctor.html" class="doctor-card block bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300">
-                <div class="relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1638202993928-7267aad84c31?w=600" alt="دکتر کریمی" class="w-full h-52 object-cover">
-                    <span class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur text-xs font-semibold text-teal-600 dark:text-teal-400 px-2.5 py-1 rounded-full">
-                        👶 اطفال
-                    </span>
-                </div>
-                <div class="p-5">
-                    <div class="flex items-start justify-between mb-3">
-                        <div>
-                            <h3 class="font-bold">دکتر کریمی</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">متخصص اطفال</p>
-                        </div>
-                        <div class="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-xs font-semibold px-2 py-1 rounded-lg">
-                            ⭐ ۴.۷
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-4">
-                        <span>📍 تهران، شهرک غرب</span>
-                        <span>•</span>
-                        <span>۱۰ سال تجربه</span>
-                    </div>
-                    <div class="block text-center w-full bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-semibold py-2.5 rounded-xl">
-                        📅 رزرو نوبت
-                    </div>
-                </div>
-            </a>
-
-            <!-- Card 5 -->
-            <a href="doctor.html" class="doctor-card block bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300">
-                <div class="relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=600" alt="دکتر نوری" class="w-full h-52 object-cover">
-                    <span class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur text-xs font-semibold text-teal-600 dark:text-teal-400 px-2.5 py-1 rounded-full">
-                        🧠 مغز و اعصاب
-                    </span>
-                </div>
-                <div class="p-5">
-                    <div class="flex items-start justify-between mb-3">
-                        <div>
-                            <h3 class="font-bold">دکتر نوری</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">فوق تخصص اعصاب</p>
-                        </div>
-                        <div class="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-xs font-semibold px-2 py-1 rounded-lg">
-                            ⭐ ۴.۵
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-4">
-                        <span>📍 تهران، میرداماد</span>
-                        <span>•</span>
-                        <span>۲۰ سال تجربه</span>
-                    </div>
-                    <div class="block text-center w-full bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-semibold py-2.5 rounded-xl">
-                        📅 رزرو نوبت
-                    </div>
-                </div>
-            </a>
-
-            <!-- Card 6 -->
-            <a href="doctor.html" class="doctor-card block bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300">
-                <div class="relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1622902046580-2b47f47f5471?w=600" alt="دکتر سعیدی" class="w-full h-52 object-cover">
-                    <span class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur text-xs font-semibold text-teal-600 dark:text-teal-400 px-2.5 py-1 rounded-full">
-                        🦴 ارتوپدی
-                    </span>
-                </div>
-                <div class="p-5">
-                    <div class="flex items-start justify-between mb-3">
-                        <div>
-                            <h3 class="font-bold">دکتر سعیدی</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">متخصص ارتوپدی</p>
-                        </div>
-                        <div class="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-xs font-semibold px-2 py-1 rounded-lg">
-                            ⭐ ۴.۸
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-4">
-                        <span>📍 تهران، جردن</span>
-                        <span>•</span>
-                        <span>۱۴ سال تجربه</span>
-                    </div>
-                    <div class="block text-center w-full bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-semibold py-2.5 rounded-xl">
-                        📅 رزرو نوبت
-                    </div>
-                </div>
-            </a>
+            {% empty %}
+            <div class="col-span-full text-center py-10">
+                <p class="text-slate-500">هیچ پزشکی یافت نشد.</p>
+            </div>
+            {% endfor %}
 
         </div>
 
         <!-- Pagination -->
         <div class="flex justify-center items-center gap-2 mt-10 flex-wrap">
-            <a href="#" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 hover:border-teal-300 hover:text-teal-600 transition">‹</a>
-            <a href="#" class="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-semibold shadow-md shadow-teal-200 dark:shadow-teal-900/50">۱</a>
-            <a href="#" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:border-teal-300 hover:text-teal-600 transition">۲</a>
-            <a href="#" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:border-teal-300 hover:text-teal-600 transition">۳</a>
-            <a href="#" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-teal-300 hover:text-teal-600 transition">›</a>
+            <a href="#" class="w-9 h-9 flex items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 hover:border-teal-300 hover:text-teal-600 transition text-sm">‹</a>
+            <a href="#" class="w-9 h-9 flex items-center justify-center rounded-lg bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-semibold shadow-md shadow-teal-200 dark:shadow-teal-900/50 text-sm">۱</a>
+            <a href="#" class="w-9 h-9 flex items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:border-teal-300 hover:text-teal-600 transition text-sm">۲</a>
+            <a href="#" class="w-9 h-9 flex items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:border-teal-300 hover:text-teal-600 transition text-sm">۳</a>
+            <a href="#" class="w-9 h-9 flex items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-teal-300 hover:text-teal-600 transition text-sm">›</a>
         </div>
     </main>
 
