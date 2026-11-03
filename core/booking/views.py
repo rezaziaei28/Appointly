@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404 , redirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from datetime import datetime, timedelta, time
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,16 +8,15 @@ from .models import Doctor, Appointment, WorkingHours
 # Create your views here.
 
 
-class HomeView(TemplateView):
+class HomeView(ListView):
     template_name = 'booking/index.html'
+    model = Doctor
+    context_object_name = 'doctors'
+    paginate_by = 8
 
-    def get(self, request, *args, **kwargs):
-        # Fetch all active doctors from the database
-        doctors = Doctor.objects.filter(is_active=True)
-        return render(request, self.template_name, {'doctors': doctors})
-
-    def post(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
 class DoctorDetailView(TemplateView):
     template_name = 'booking/doctor.html'
