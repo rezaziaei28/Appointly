@@ -3,6 +3,8 @@ from django.views.generic import TemplateView, ListView
 from datetime import datetime, timedelta, time
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q, Value
+from django.db.models.functions import Concat
 
 from .models import Doctor, Appointment, WorkingHours
 # Create your views here.
@@ -14,9 +16,20 @@ class HomeView(ListView):
     context_object_name = 'doctors'
     paginate_by = 8
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+    def get_queryset(self):
+        queryset = Doctor.objects.filter(is_active=True)
+        search_query = self.request.GET.get('q')
+        
+        if search_query:
+            # Annotate full name and search in it
+            queryset = queryset.annotate(
+                full_name=Concat('first_name', Value(' '), 'last_name')
+            ).filter(
+                Q(full_name__icontains=search_query) |
+                Q(specialty__icontains=search_query) |
+                Q(address__icontains=search_query)
+            )
+        return queryset
 
 class DoctorDetailView(TemplateView):
     template_name = 'booking/doctor.html'

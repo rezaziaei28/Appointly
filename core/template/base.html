@@ -42,11 +42,11 @@
 
             <div class="flex items-center gap-2">
 
-                <div class="hidden md:flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-2 w-64">
-                    <span class="text-slate-400">🔍</span>
-                    <input type="text" placeholder="جستجوی پزشک..."
-                           class="bg-transparent border-none outline-none text-sm w-full pr-2 text-slate-800 dark:text-slate-100 placeholder-slate-400">
-                </div>
+                <form action="{% url 'booking:home' %}" method="GET" class="hidden md:flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-2 w-64">
+                    <button type="submit" class="text-slate-400">🔍</button>
+                    <input type="text" name="q" value="{{ request.GET.q|default:'' }}" placeholder="جستجوی پزشک..."
+                        class="bg-transparent border-none outline-none text-sm w-full pr-2 text-slate-800 dark:text-slate-100 placeholder-slate-400">
+                </form>
 
                 <!-- Dark mode toggle -->
                 <button id="themeToggle"
@@ -81,10 +81,10 @@
                 <a href="#" class="px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">درباره ما</a>
                 <a href="#" class="px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">تماس</a>
 
-                <div class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-2 mt-2">
-                    <span class="text-slate-400">🔍</span>
-                    <input type="text" placeholder="جستجو..." class="bg-transparent border-none outline-none text-sm w-full pr-2 placeholder-slate-400">
-                </div>
+                <form action="{% url 'booking:home' %}" method="GET" class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-2 mt-2">
+                    <button type="submit" class="text-slate-400">🔍</button>
+                    <input type="text" name="q" value="{{ request.GET.q|default:'' }}" placeholder="جستجو..." class="bg-transparent border-none outline-none text-sm w-full pr-2 placeholder-slate-400">
+                </form>
 
                 {% if request.user.is_authenticated %}
                     <a href="{% url 'panel:panel' %}" class="mt-2 text-center bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-semibold px-4 py-2 rounded-xl">
