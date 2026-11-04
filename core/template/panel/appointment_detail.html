@@ -5,47 +5,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>جزئیات نوبت | رزرو نوبت</title>
+    <script src="{% static 'js/config.js' %}"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<body class="bg-slate-900/50 backdrop-blur-sm min-h-screen flex items-center justify-center p-4">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex items-center justify-center p-4 transition-colors duration-300">
 
-    <!-- Modal Overlay -->
-    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 w-full max-w-md shadow-2xl relative">
+    <!-- Modal Card -->
+    <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-md shadow-xl overflow-hidden relative border border-slate-200 dark:border-slate-700">
         
         <!-- Close Button -->
-        <a href="{% url 'panel:panel' %}" class="absolute top-4 left-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-500 transition">
+        <a href="{% url 'panel:panel' %}" class="absolute top-4 left-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-600 transition z-10">
             ✕
         </a>
 
-        <h2 class="text-xl font-bold mb-6 text-center">جزئیات نوبت</h2>
+        <!-- Header -->
+        <div class="pt-10 pb-6 px-6 text-center border-b border-slate-100 dark:border-slate-700">
+            <h2 class="text-xl font-bold text-slate-800 dark:text-slate-100">جزئیات نوبت</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">اطلاعات کامل رزرو شما</p>
+        </div>
 
-        <div class="space-y-4">
-            <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl">
-                <span class="text-slate-500 dark:text-slate-400">پزشک:</span>
-                <span class="font-bold">دکتر {{ appointment.doctor.first_name }} {{ appointment.doctor.last_name }}</span>
+        <!-- Body -->
+        <div class="p-6 space-y-4">
+            
+            <!-- Doctor Info -->
+            <div class="flex items-center gap-4 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700">
+                <img src="{{ appointment.doctor.image.url }}" alt="{{ appointment.doctor.last_name }}" class="w-14 h-14 rounded-xl object-cover">
+                <div>
+                    <p class="font-bold text-slate-800 dark:text-slate-100">دکتر {{ appointment.doctor.first_name }} {{ appointment.doctor.last_name }}</p>
+                    <p class="text-xs text-teal-600 dark:text-teal-400 font-semibold">{{ appointment.doctor.specialty }}</p>
+                </div>
             </div>
-            <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl">
-                <span class="text-slate-500 dark:text-slate-400">تخصص:</span>
-                <span class="font-bold">{{ appointment.doctor.specialty }}</span>
+
+            <!-- Date & Time -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl text-center border border-slate-100 dark:border-slate-700">
+                    <span class="block text-slate-500 dark:text-slate-400 text-xs mb-1">تاریخ</span>
+                    <span class="font-bold text-slate-800 dark:text-slate-100">{{ appointment.date }}</span>
+                </div>
+                <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl text-center border border-slate-100 dark:border-slate-700">
+                    <span class="block text-slate-500 dark:text-slate-400 text-xs mb-1">ساعت</span>
+                    <span class="font-bold text-slate-800 dark:text-slate-100" dir="ltr">{{ appointment.time }}</span>
+                </div>
             </div>
-            <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl">
-                <span class="text-slate-500 dark:text-slate-400">تاریخ:</span>
-                <span class="font-bold">{{ appointment.date }}</span>
-            </div>
-            <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl">
-                <span class="text-slate-500 dark:text-slate-400">ساعت:</span>
-                <span class="font-bold" dir="ltr">{{ appointment.time }}</span>
-            </div>
-            <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl">
-                <span class="text-slate-500 dark:text-slate-400">وضعیت:</span>
-                <span class="font-bold text-yellow-600">{{ appointment.status }}</span>
+
+            <!-- Status -->
+            <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700">
+                <span class="text-slate-500 dark:text-slate-400 text-sm">وضعیت نوبت</span>
+                {% if appointment.status == 'pending' %}
+                    <span class="px-3 py-1 rounded-lg bg-yellow-100 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-400 text-xs font-bold">در انتظار تایید</span>
+                {% elif appointment.status == 'confirmed' %}
+                    <span class="px-3 py-1 rounded-lg bg-teal-100 text-teal-700 dark:bg-teal-500/20 dark:text-teal-400 text-xs font-bold">تایید شده</span>
+                {% else %}
+                    <span class="px-3 py-1 rounded-lg bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400 text-xs font-bold">لغو شده</span>
+                {% endif %}
             </div>
         </div>
 
-        <a href="{% url 'panel:panel' %}" class="block w-full mt-6 py-3 text-center rounded-xl bg-slate-100 dark:bg-slate-700 font-semibold hover:bg-slate-200 transition">
-            بستن
-        </a>
+        <!-- Footer -->
+        <div class="p-6 pt-0">
+            <a href="{% url 'panel:panel' %}" class="block w-full py-3.5 text-center rounded-xl bg-slate-100 dark:bg-slate-700 font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 transition">
+                بستن
+            </a>
+        </div>
     </div>
+
+    <script src="{% static 'js/app.js' %}"></script>
 </body>
 </html>
