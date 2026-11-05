@@ -148,3 +148,22 @@ class ConfirmAppointmentView(LoginRequiredMixin, TemplateView):
         messages.success(request, "Appointment booked successfully.")
         return redirect('panel:panel')
 
+class DoctorListView(ListView):
+    model = Doctor
+    template_name = 'booking/doctor_list.html'
+    context_object_name = 'doctors'
+    paginate_by = 12 # Show more doctors per page here
+
+    def get_queryset(self):
+        queryset = Doctor.objects.filter(is_active=True)
+        search_query = self.request.GET.get('q')
+        
+        if search_query:
+            queryset = queryset.annotate(
+                full_name=Concat('first_name', Value(' '), 'last_name')
+            ).filter(
+                Q(full_name__icontains=search_query) |
+                Q(specialty__icontains=search_query) |
+                Q(address__icontains=search_query)
+            )
+        return queryset
