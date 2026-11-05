@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}مشاهده همه پزشکان{% endblock %}
+
+{% block content %}
+<main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-8">
+
+    <!-- Header -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-l from-teal-500 to-cyan-500 p-8 sm:p-10 mb-8 text-white shadow-lg shadow-teal-200 dark:shadow-teal-900/50">
+        <!-- Background Decorations -->
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full"></div>
+        <div class="absolute -bottom-10 -left-10 w-52 h-52 bg-white/10 rounded-full"></div>
+        
+        <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold mb-2">همه پزشکان</h1>
+                <p class="text-sm sm:text-base text-white/90">پزشک مورد نظرت رو پیدا کن و توی چند ثانیه نوبتت رو رزرو کن.</p>
+            </div>
+            <div class="hidden sm:flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur rounded-2xl text-3xl">
+                👨‍⚕️
+            </div>
+        </div>
+    </div>
+
+    <div class="grid lg:grid-cols-4 gap-8 items-start">
+
+        <!-- Sidebar (Filters & Search) - Left side -->
+        <aside class="lg:col-span-1 bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-100 dark:border-slate-700 shadow-sm sticky top-24">
+            <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-slate-800 dark:text-slate-100">
+                <span>🔍</span> جستجو
+            </h2>
+            
+            <form action="{% url 'booking:doctor_list' %}" method="GET" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">نام پزشک، تخصص یا آدرس</label>
+                    <div class="flex items-center bg-slate-50 dark:bg-slate-900/50 rounded-xl px-3 py-3 border border-slate-200 dark:border-slate-700 focus-within:border-teal-500 transition">
+                        <input type="text" name="q" value="{{ request.GET.q|default:'' }}" placeholder="مثلاً قلب..." 
+                               class="bg-transparent border-none outline-none text-sm w-full text-slate-800 dark:text-slate-100 placeholder-slate-400">
+                    </div>
+                </div>
+                
+                <button type="submit" class="w-full bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-bold py-3 rounded-xl hover:shadow-lg hover:shadow-teal-200 transition">
+                    جستجو
+                </button>
+                
+                {% if request.GET.q %}
+                <a href="{% url 'booking:doctor_list' %}" class="block text-center text-xs text-red-500 hover:underline mt-2">
+                    پاک کردن فیلترها
+                </a>
+                {% endif %}
+            </form>
+        </aside>
+
+        <!-- Doctors Grid - Right side -->
+        <div class="lg:col-span-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for doctor in doctors %}
+                <a href="{% url 'booking:doctor_detail' doctor.id %}" class="doctor-card block bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+                    
+                    <div class="relative overflow-hidden aspect-[4/3] w-full">
+                        {% if doctor.image %}
+                            <img src="{{ doctor.image.url }}" alt="دکتر {{ doctor.last_name }}" class="w-full h-full object-cover">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600" alt="Doctor" class="w-full h-full object-cover">
+                        {% endif %}
+                        <span class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur text-[11px] font-semibold text-teal-600 dark:text-teal-400 px-2.5 py-1 rounded-full">
+                            {{ doctor.specialty }}
+                        </span>
+                    </div>
+
+                    <div class="p-4 flex flex-col flex-grow">
+                        <div class="flex items-start justify-between mb-2">
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100">دکتر {{ doctor.first_name }} {{ doctor.last_name }}</h3>
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{{ doctor.specialty }}</p>
+                            </div>
+                            <div class="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-[10px] font-semibold px-2 py-1 rounded-lg">
+                                ⭐ ۴.۸
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400 mb-4 line-clamp-1">
+                            <span>📍 {{ doctor.address }}</span>
+                        </div>
+
+                        <div class="mt-auto block text-center w-full bg-gradient-to-l from-teal-500 to-cyan-500 text-white text-xs font-semibold py-2.5 rounded-xl">
+                            📅 رزرو نوبت
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                <div class="col-span-full text-center py-16 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700">
+                    <p class="text-4xl mb-4">🔍</p>
+                    <p class="text-lg font-bold text-slate-700 dark:text-slate-300">پزشکی یافت نشد</p>
+                    <p class="text-sm text-slate-500">لطفاً با کلمه‌ی دیگری جستجو کنید.</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-center items-center gap-2 mt-10 flex-wrap">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-teal-300 hover:text-teal-600 transition">‹</a>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-semibold">{{ num }}</span>
+                    {% else %}
+                        <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:border-teal-300 hover:text-teal-600 transition">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-teal-300 hover:text-teal-600 transition">›</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
