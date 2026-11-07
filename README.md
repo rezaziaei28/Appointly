@@ -21,12 +21,30 @@ Appointly is designed to make booking doctor appointments simple and fast. Users
 - **Frontend:** HTML, Tailwind CSS, Vanilla JavaScript
 - **DevOps:** Docker, Docker Compose
 
-## What I Learned & Challenged
+## Challenges I Faced and Solved
 
-*(This section will be updated as I build the backend)*
+Building this project wasn't just about writing code. I ran into several real-world problems that took time to solve. Here are the main ones:
 
-- **Database Migration:** Transitioned from SQLite to PostgreSQL inside Docker, handling custom user models and migration dependencies.
-- **Custom Authentication:** Designed a custom User model using `AbstractUser` to allow phone number login and a custom `UserManager`.
+### 1. Custom User Model and OTP Authentication
+Django's default User model uses usernames, but I needed phone number authentication. I had to create a custom `UserManager`, set `AUTH_USER_MODEL` in settings, and handle the migration process carefully to avoid conflicts with the built-in auth tables. I also implemented an OTP system that stores codes in the database and verifies them with a 2-minute expiration time.
+
+### 2. Dynamic Booking Slots (Not Hardcoded)
+Instead of hardcoding time slots in HTML, I built a system where doctors define their `WorkingHours` in the admin panel. The backend then calculates available 30-minute slots for the next 30 days, checks which ones are already booked, and sends them to the template. This ensures that only truly available times are shown to the patient.
+
+### 3. Preventing Double Booking
+When two users try to book the same slot simultaneously, we needed to prevent conflicts. I added a `UniqueConstraint` on the `Appointment` model for `(doctor, date, time)`. Now, the database itself rejects duplicate bookings at the same time, ensuring data integrity.
+
+### 4. Docker and Database Migration Issues
+While switching from SQLite to PostgreSQL in Docker, I faced `ModuleNotFoundError` and `DisallowedHost` errors. I fixed these by correctly configuring the `psycopg2-binary` package, setting the `DATABASES` host to the Docker service name (`db`), and adding `backend` to `ALLOWED_HOSTS`.
+
+### 5. Doctor Panel Access Logic
+When building the doctor dashboard, I had to make sure that only users who are actually registered as doctors can access it. I added a check in the view that looks up the `Doctor` model by the logged-in user. If the user is not a doctor, they are redirected to the patient panel with an error message.
+
+## What I Plan to Learn Next
+
+- Writing automated tests for views and models.
+- Adding SMS integration for sending OTP codes in production.
+- Implementing online payment for appointments.
 
 ## How to Run This Project
 
