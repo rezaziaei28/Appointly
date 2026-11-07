@@ -42,3 +42,31 @@ class CancelAppointmentView(LoginRequiredMixin, TemplateView):
         appointment.delete()
         messages.success(request, "نوبت شما با موفقیت لغو شد.")
         return redirect('panel:panel')
+
+from booking.models import Appointment, Doctor
+
+class DoctorPanel(LoginRequiredMixin, TemplateView):
+    template_name = "panel/doctor_panel.html"
+    login_url = 'accounts:login'
+
+    def get(self, request, *args, **kwargs):
+        # Check if the logged-in user is actually a doctor
+        try:
+            doctor = Doctor.objects.get(user=request.user)
+        except Doctor.DoesNotExist:
+            # If user is not a doctor, redirect to normal patient panel
+            messages.error(request, "شما دسترسی به پنل پزشکان ندارید.")
+            return redirect('panel:panel')
+
+        # Get appointments for this specific doctor
+        appointments = Appointment.objects.filter(doctor=doctor).order_by('-date', '-time')
+        
+        # Count pending appointments
+        pending_count = appointments.filter(status='pending').count()
+
+        context = {
+            'doctor': doctor,
+            'appointments': appointments,
+            'pending_count': pending_count,
+        }
+        return render(request, self.template_name, context)
