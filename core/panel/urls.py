@@ -7,5 +7,5 @@ urlpatterns = [
     path('', PanelView.as_view(), name='panel'),
     path('appointment/<int:pk>/', AppointmentDetailView.as_view(), name='appointment_detail'),
     path('appointment/<int:pk>/cancel/', CancelAppointmentView.as_view(), name='cancel_appointment'),
-
+    path('doctor-panel/', DoctorPanel.as_view(), name='doctor_panel'),
 ]
