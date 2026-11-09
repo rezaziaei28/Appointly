@@ -40,11 +40,11 @@ While switching from SQLite to PostgreSQL in Docker, I faced `ModuleNotFoundErro
 ### 5. Doctor Panel Access Logic
 When building the doctor dashboard, I had to make sure that only users who are actually registered as doctors can access it. I added a check in the view that looks up the `Doctor` model by the logged-in user. If the user is not a doctor, they are redirected to the patient panel with an error message.
 
-## What I Plan to Learn Next
+## Future Roadmap
 
-- Writing automated tests for views and models.
-- Adding SMS integration for sending OTP codes in production.
-- Implementing online payment for appointments.
+- Writing automated tests for the booking flow.
+- Integrating a real SMS provider (like Kavenegar) for OTP delivery in production.
+- Implementing an online payment gateway for booking fees.
 
 ## How to Run This Project
 
