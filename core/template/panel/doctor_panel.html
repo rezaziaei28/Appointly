@@ -123,7 +123,6 @@
         </div>
     </div>
 
-    <!-- 2. SCHEDULE TAB -->
         <!-- 2. SCHEDULE TAB -->
     <div id="tab-schedule" class="tab-content hidden">
         <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700 shadow-sm">
@@ -134,77 +133,163 @@
                 برای هر روزی که کار می‌کنید، ساعت شروع، پایان و ظرفیت نوبت‌دهی را مشخص کنید.
             </p>
             
-            <form action="#" method="POST">
+            <form action="{% url 'panel:doctor_panel' %}" method="POST">
                 {% csrf_token %}
                 <div class="space-y-4">
                     
-                    <!-- Saturday -->
+                    <!-- Saturday (0) -->
                     <div class="flex flex-col lg:flex-row lg:items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-700">
                         <div class="flex items-center gap-3 lg:w-1/4">
-                            <input type="checkbox" checked class="w-5 h-5 rounded text-teal-500 focus:ring-teal-500 border-slate-300">
+                            <input type="checkbox" name="day_0" {% if hours_dict.5 %}checked{% endif %} class="w-5 h-5 rounded text-teal-500 focus:ring-teal-500 border-slate-300">
                             <span class="font-bold text-sm text-slate-800 dark:text-slate-100">شنبه</span>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 flex-1">
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-slate-500 dark:text-slate-400">از</span>
-                                <input type="time" value="09:00" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
+                                <input type="time" name="start_0" value="{{ hours_dict.5.start_time|time:'H:i'|default:'' }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-slate-500 dark:text-slate-400">تا</span>
-                                <input type="time" value="18:00" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
+                                <input type="time" name="end_0" value="{{ hours_dict.5.end_time|time:'H:i'|default:'' }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-slate-500 dark:text-slate-400">ظرفیت</span>
-                                <input type="number" value="20" class="w-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-center focus:border-teal-500 focus:outline-none">
+                                <input type="number" name="capacity_0" value="{{ hours_dict.5.capacity|default:'10' }}" class="w-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-center focus:border-teal-500 focus:outline-none">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Sunday -->
+                    <!-- Sunday (1) -->
                     <div class="flex flex-col lg:flex-row lg:items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-700">
                         <div class="flex items-center gap-3 lg:w-1/4">
-                            <input type="checkbox" checked class="w-5 h-5 rounded text-teal-500 focus:ring-teal-500 border-slate-300">
+                            <input type="checkbox" name="day_1" {% if hours_dict.6 %}checked{% endif %} class="w-5 h-5 rounded text-teal-500 focus:ring-teal-500 border-slate-300">
                             <span class="font-bold text-sm text-slate-800 dark:text-slate-100">یکشنبه</span>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 flex-1">
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-slate-500 dark:text-slate-400">از</span>
-                                <input type="time" value="09:00" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
+                                <input type="time" name="start_1" value="{{ hours_dict.6.start_time|time:'H:i'|default:'' }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-slate-500 dark:text-slate-400">تا</span>
-                                <input type="time" value="18:00" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
+                                <input type="time" name="end_1" value="{{ hours_dict.6.end_time|time:'H:i'|default:'' }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-slate-500 dark:text-slate-400">ظرفیت</span>
-                                <input type="number" value="20" class="w-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-center focus:border-teal-500 focus:outline-none">
+                                <input type="number" name="capacity_1" value="{{ hours_dict.6.capacity|default:'10' }}" class="w-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-center focus:border-teal-500 focus:outline-none">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Monday -->
+                    <!-- Monday (2) -->
                     <div class="flex flex-col lg:flex-row lg:items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-700">
                         <div class="flex items-center gap-3 lg:w-1/4">
-                            <input type="checkbox" checked class="w-5 h-5 rounded text-teal-500 focus:ring-teal-500 border-slate-300">
+                            <input type="checkbox" name="day_2" {% if hours_dict.0 %}checked{% endif %} class="w-5 h-5 rounded text-teal-500 focus:ring-teal-500 border-slate-300">
                             <span class="font-bold text-sm text-slate-800 dark:text-slate-100">دوشنبه</span>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 flex-1">
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-slate-500 dark:text-slate-400">از</span>
-                                <input type="time" value="09:00" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
+                                <input type="time" name="start_2" value="{{ hours_dict.0.start_time|time:'H:i'|default:'' }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-slate-500 dark:text-slate-400">تا</span>
-                                <input type="time" value="18:00" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
+                                <input type="time" name="end_2" value="{{ hours_dict.0.end_time|time:'H:i'|default:'' }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-slate-500 dark:text-slate-400">ظرفیت</span>
-                                <input type="number" value="20" class="w-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-center focus:border-teal-500 focus:outline-none">
+                                <input type="number" name="capacity_2" value="{{ hours_dict.0.capacity|default:'10' }}" class="w-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-center focus:border-teal-500 focus:outline-none">
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- You can copy this block for other days -->
+
+                    <!-- Tuesday (3) -->
+                    <div class="flex flex-col lg:flex-row lg:items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-700">
+                        <div class="flex items-center gap-3 lg:w-1/4">
+                            <input type="checkbox" name="day_3" {% if hours_dict.1 %}checked{% endif %} class="w-5 h-5 rounded text-teal-500 focus:ring-teal-500 border-slate-300">
+                            <span class="font-bold text-sm text-slate-800 dark:text-slate-100">سه‌شنبه</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-500 dark:text-slate-400">از</span>
+                                <input type="time" name="start_3" value="{{ hours_dict.1.start_time|time:'H:i'|default:'' }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-500 dark:text-slate-400">تا</span>
+                                <input type="time" name="end_3" value="{{ hours_dict.1.end_time|time:'H:i'|default:'' }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-500 dark:text-slate-400">ظرفیت</span>
+                                <input type="number" name="capacity_3" value="{{ hours_dict.1.capacity|default:'10' }}" class="w-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-center focus:border-teal-500 focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wednesday (4) -->
+                    <div class="flex flex-col lg:flex-row lg:items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-700">
+                        <div class="flex items-center gap-3 lg:w-1/4">
+                            <input type="checkbox" name="day_4" {% if hours_dict.2 %}checked{% endif %} class="w-5 h-5 rounded text-teal-500 focus:ring-teal-500 border-slate-300">
+                            <span class="font-bold text-sm text-slate-800 dark:text-slate-100">چهارشنبه</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-500 dark:text-slate-400">از</span>
+                                <input type="time" name="start_4" value="{{ hours_dict.2.start_time|time:'H:i'|default:'' }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-500 dark:text-slate-400">تا</span>
+                                <input type="time" name="end_4" value="{{ hours_dict.2.end_time|time:'H:i'|default:'' }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-500 dark:text-slate-400">ظرفیت</span>
+                                <input type="number" name="capacity_4" value="{{ hours_dict.2.capacity|default:'10' }}" class="w-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-center focus:border-teal-500 focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thursday (5) -->
+                    <div class="flex flex-col lg:flex-row lg:items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-700">
+                        <div class="flex items-center gap-3 lg:w-1/4">
+                            <input type="checkbox" name="day_5" {% if hours_dict.3 %}checked{% endif %} class="w-5 h-5 rounded text-teal-500 focus:ring-teal-500 border-slate-300">
+                            <span class="font-bold text-sm text-slate-800 dark:text-slate-100">پنجشنبه</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-500 dark:text-slate-400">از</span>
+                                <input type="time" name="start_5" value="{{ hours_dict.3.start_time|time:'H:i'|default:'' }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-500 dark:text-slate-400">تا</span>
+                                <input type="time" name="end_5" value="{{ hours_dict.3.end_time|time:'H:i'|default:'' }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-500 dark:text-slate-400">ظرفیت</span>
+                                <input type="number" name="capacity_5" value="{{ hours_dict.3.capacity|default:'10' }}" class="w-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-center focus:border-teal-500 focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Friday (6) -->
+                    <div class="flex flex-col lg:flex-row lg:items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-700">
+                        <div class="flex items-center gap-3 lg:w-1/4">
+                            <input type="checkbox" name="day_6" {% if hours_dict.4 %}checked{% endif %} class="w-5 h-5 rounded text-teal-500 focus:ring-teal-500 border-slate-300">
+                            <span class="font-bold text-sm text-slate-800 dark:text-slate-100">جمعه</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-500 dark:text-slate-400">از</span>
+                                <input type="time" name="start_6" value="{{ hours_dict.4.start_time|time:'H:i'|default:'' }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-500 dark:text-slate-400">تا</span>
+                                <input type="time" name="end_6" value="{{ hours_dict.4.end_time|time:'H:i'|default:'' }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-teal-500 focus:outline-none">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-500 dark:text-slate-400">ظرفیت</span>
+                                <input type="number" name="capacity_6" value="{{ hours_dict.4.capacity|default:'10' }}" class="w-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-center focus:border-teal-500 focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
                 
