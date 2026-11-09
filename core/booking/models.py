@@ -29,6 +29,7 @@ class WorkingHours(models.Model):
     day_of_week = models.IntegerField(choices=DAYS_OF_WEEK)
     start_time = models.TimeField()
     end_time = models.TimeField()
+    capacity = models.PositiveIntegerField(default=10)
 
     def __str__(self):
         return f"{self.doctor.last_name} - {self.get_day_of_week_display()}"
