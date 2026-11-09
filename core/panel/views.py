@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 
-from booking.models import Appointment
+from booking.models import Appointment, WorkingHours
 from accounts.models import Profile
 # Create your views here.
 
@@ -64,9 +64,53 @@ class DoctorPanel(LoginRequiredMixin, TemplateView):
         # Count pending appointments
         pending_count = appointments.filter(status='pending').count()
 
+        # Get working hours for the doctor to show in the form
+        working_hours = WorkingHours.objects.filter(doctor=doctor)
+        # Create a dictionary to easily access working hours by day in template
+        hours_dict = {wh.day_of_week: wh for wh in working_hours}
+
         context = {
             'doctor': doctor,
             'appointments': appointments,
             'pending_count': pending_count,
+            'hours_dict': hours_dict, 
         }
         return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            doctor = Doctor.objects.get(user=request.user)
+        except Doctor.DoesNotExist:
+            return redirect('panel:panel')
+
+        # Delete old working hours
+        WorkingHours.objects.filter(doctor=doctor).delete()
+        
+        days_mapping = {
+            '0': 5, # Saturday
+            '1': 6, # Sunday
+            '2': 0, # Monday
+            '3': 1, # Tuesday
+            '4': 2, # Wednesday
+            '5': 3, # Thursday
+            '6': 4, # Friday
+        }
+
+        for i in range(7):
+            # Check if day is selected
+            if f'day_{i}' in request.POST:
+                start_time = request.POST.get(f'start_{i}')
+                end_time = request.POST.get(f'end_{i}')
+                capacity = request.POST.get(f'capacity_{i}', 10)
+                
+                if start_time and end_time:
+                    WorkingHours.objects.create(
+                        doctor=doctor,
+                        day_of_week=days_mapping[str(i)],
+                        start_time=start_time,
+                        end_time=end_time,
+                        capacity=capacity
+                    )
+
+        messages.success(request, "برنامه کاری با موفقیت ذخیره شد.")
+        return redirect('panel:doctor_panel')
