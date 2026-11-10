@@ -83,17 +83,23 @@ class BookAppointmentView(TemplateView):
         available_times = []
         booked_times = []
 
-        # Generate time slots based on working hours
         for wh in working_hours:
             start_dt = datetime.combine(selected_date, wh.start_time)
             end_dt = datetime.combine(selected_date, wh.end_time)
             
-            while start_dt < end_dt:
-                time_str = start_dt.strftime('%H:%M')
+            # Calculate total minutes and interval based on capacity
+            total_minutes = (end_dt - start_dt).total_seconds() / 60
+            capacity = wh.capacity if wh.capacity > 0 else 1
+            interval_minutes = int(total_minutes / capacity)
+
+            # Generate slots based on calculated interval
+            current_dt = start_dt
+            while current_dt < end_dt:
+                time_str = current_dt.strftime('%H:%M')
                 is_booked = Appointment.objects.filter(
                     doctor=doctor, 
                     date=selected_date, 
-                    time=start_dt.time()
+                    time=current_dt.time()
                 ).exists()
                 
                 if is_booked:
@@ -101,7 +107,7 @@ class BookAppointmentView(TemplateView):
                 else:
                     available_times.append(time_str)
                     
-                start_dt += timedelta(minutes=30)
+                current_dt += timedelta(minutes=interval_minutes)
 
         # Regenerate dates for the sidebar
         today = datetime.now().date()
