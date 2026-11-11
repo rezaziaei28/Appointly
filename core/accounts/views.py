@@ -75,7 +75,8 @@ class VerifyView(TemplateView):
         if created:
             return redirect('accounts:register') 
         
-        return redirect('accounts:register') 
+        # If user exists, go directly to panel
+        return redirect('panel:panel')
 
 class RegisterView(TemplateView):
     template_name = 'accounts/register.html'
@@ -87,23 +88,11 @@ class RegisterView(TemplateView):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         national_id = request.POST.get('national_id')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
         
         if not first_name or not last_name:
             # check importing first_name and last_name
             messages.error(request, "نام و نام خانوادگی الزامی است")
             return render(request, self.template_name)
-
-        if password != confirm_password:
-            messages.error(request, "رمز عبور و تکرار آن یکسان نیستند")
-            return render(request, self.template_name)
-
-        # Update user password
-        if password:
-            request.user.set_password(password)
-            request.user.save()
-            login(request, request.user)
 
         # Create or update profile
         profile, created = Profile.objects.get_or_create(user=request.user)
