@@ -28,15 +28,6 @@ class LoginView(TemplateView):
         
         return render(request, 'accounts/verify.html', {'phone_number': phone_number, "otp": otp.code})
 
-class PasswordView(TemplateView):
-    template_name = 'accounts/password.html'
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
-
-    def post(self, request, *args, **kwargs):
-        return render(request, self.template_name)
-
 class VerifyView(TemplateView):
     template_name = 'accounts/verify.html'
 
@@ -103,24 +94,6 @@ class RegisterView(TemplateView):
 
         messages.success(request, "اطلاعات با موفقیت ثبت شد")
         return redirect('panel:panel')
-
-class ForgotView(TemplateView):
-    template_name = 'accounts/forgot.html'
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
-
-    def post(self, request, *args, **kwargs):
-        return render(request, self.template_name)
-
-class ResetView(TemplateView):
-    template_name = 'accounts/reset.html'
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
-
-    def post(self, request, *args, **kwargs):
-        return render(request, self.template_name)
 
 class LogoutView(TemplateView):
     '''log out user'''
