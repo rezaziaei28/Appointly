@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q, Value
 from django.db.models.functions import Concat
 
-from .models import Doctor, Appointment, WorkingHours
+from .models import Doctor, Appointment, WorkingHours,Specialty
 # Create your views here.
 
 
@@ -26,10 +26,18 @@ class HomeView(ListView):
                 full_name=Concat('first_name', Value(' '), 'last_name')
             ).filter(
                 Q(full_name__icontains=search_query) |
-                Q(specialty__icontains=search_query) |
+                Q(specialty__name__icontains=search_query) |
                 Q(address__icontains=search_query)
             )
+        specialty_slug = self.request.GET.get('specialty')
+        if specialty_slug:
+            queryset = queryset.filter(specialty__slug=specialty_slug)
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['specialties'] = Specialty.objects.filter(is_active=True)[:6]
+        return context
 
 class DoctorDetailView(TemplateView):
     template_name = 'booking/doctor.html'
