@@ -8,7 +8,7 @@ class Doctor(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    specialty = models.CharField(max_length=100)
+    specialty = models.ForeignKey("Specialty", on_delete=models.SET_NULL, null=True, blank=True)
     bio = models.TextField(blank=True)
     address = models.CharField(max_length=255, blank=True)
     phone_number = models.CharField(max_length=11, blank=True)
@@ -60,3 +60,21 @@ class Appointment(models.Model):
 
     def __str__(self):
         return f"{self.patient.phone_number} with Dr. {self.doctor.last_name} on {self.date} at {self.time}"
+
+class Specialty(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name_plural = "Specialties"
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
