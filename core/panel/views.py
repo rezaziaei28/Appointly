@@ -88,9 +88,10 @@ class DoctorPanel(LoginRequiredMixin, TemplateView):
         if 'update_profile' in request.POST:
             doctor.first_name = request.POST.get('first_name', doctor.first_name)
             doctor.last_name = request.POST.get('last_name', doctor.last_name)
-            specialty_id = request.POST.get('specialty')
-            if specialty_id:
-                doctor.specialty_id = specialty_id
+            specialty_name = request.POST.get('specialty')
+            if specialty_name:
+                specialty_obj, _ = Specialty.objects.get_or_create(name=specialty_name)
+                doctor.specialty = specialty_obj
                 
             doctor.bio = request.POST.get('bio', doctor.bio)
             doctor.address = request.POST.get('address', doctor.address)
