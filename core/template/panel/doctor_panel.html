@@ -279,9 +279,9 @@
                 <span>👤</span> ویرایش پروفایل
             </h2>
             
-            <form action="#" method="POST" enctype="multipart/form-data">
+            <form action="{% url 'panel:doctor_panel' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                
+                <input type="hidden" name="update_profile" value="1">
                 <!-- Image Upload (Better Design) -->
                 <div class="flex flex-col sm:flex-row items-center gap-6 mb-8 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-700">
                     <div class="relative group cursor-pointer">
@@ -306,9 +306,40 @@
                         <label class="block text-sm font-semibold mb-2">نام خانوادگی</label>
                         <input type="text" name="last_name" value="{{ doctor.last_name }}" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-teal-500 focus:outline-none transition">
                     </div>
-                    <div class="md:col-span-2">
+                                        <div class="md:col-span-2 relative">
                         <label class="block text-sm font-semibold mb-2">تخصص</label>
-                        <input type="text" name="specialty" value="{{ doctor.specialty }}" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-teal-500 focus:outline-none transition">
+                        
+                        <!-- Custom Searchable Select -->
+                        <div class="relative">
+                            <!-- Trigger Button -->
+                            <button type="button" onclick="toggleDropdown()" id="dropdown-trigger" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-between text-slate-800 dark:text-slate-100 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none transition">
+                                <span id="selected-specialty-text">{{ doctor.specialty.name|default:'انتخاب تخصص...' }}</span>
+                                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            
+                            <!-- Hidden input to store the actual value -->
+                            <input type="hidden" name="specialty" id="specialty-input" value="{{ doctor.specialty.name|default:'' }}">
+
+                            <!-- Dropdown Menu -->
+                            <div id="dropdown-menu" class="absolute z-50 w-full mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 hidden overflow-hidden">
+                                <!-- Search Box -->
+                                <div class="p-2 border-b border-slate-100 dark:border-slate-700">
+                                    <div class="relative">
+                                        <svg class="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                        <input type="text" id="dropdown-search" placeholder="جستجوی تخصص..." class="w-full pr-10 pl-3 py-2 bg-slate-50 dark:bg-slate-900 border-none rounded-lg text-sm text-slate-800 dark:text-slate-100 focus:ring-0 outline-none">
+                                    </div>
+                                </div>
+                                
+                                <!-- Options List -->
+                                <ul id="dropdown-list" class="max-h-48 overflow-y-auto p-1">
+                                    {% for specialty in specialties_list %}
+                                    <li onclick="selectSpecialty('{{ specialty.name }}')" class="px-3 py-2 text-sm text-slate-700 dark:text-slate-300 rounded-lg cursor-pointer hover:bg-teal-50 dark:hover:bg-teal-500/10 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+                                        {{ specialty.name }}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-sm font-semibold mb-2">بیوگرافی</label>
@@ -363,5 +394,43 @@
             }
         });
     }
+        // Custom Dropdown Logic
+    function toggleDropdown() {
+        const menu = document.getElementById('dropdown-menu');
+        menu.classList.toggle('hidden');
+        if (!menu.classList.contains('hidden')) {
+            document.getElementById('dropdown-search').focus();
+        }
+    }
+
+    function selectSpecialty(name) {
+        document.getElementById('selected-specialty-text').textContent = name;
+        document.getElementById('specialty-input').value = name;
+        document.getElementById('dropdown-menu').classList.add('hidden');
+    }
+
+    // Search Filter Logic
+    document.getElementById('dropdown-search').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const listItems = document.querySelectorAll('#dropdown-list li');
+        
+        listItems.forEach(item => {
+            if (item.textContent.toLowerCase().includes(searchTerm)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const trigger = document.getElementById('dropdown-trigger');
+        const menu = document.getElementById('dropdown-menu');
+        
+        if (trigger && !trigger.contains(event.target) && menu && !menu.contains(event.target)) {
+            menu.classList.add('hidden');
+        }
+    });
 </script>
 {% endblock %}
