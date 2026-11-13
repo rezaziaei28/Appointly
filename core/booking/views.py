@@ -181,3 +181,6 @@ class DoctorListView(ListView):
                 Q(address__icontains=search_query)
             )
         return queryset
+
+class AboutView(TemplateView):
+    template_name = 'booking/about.html'
