@@ -1,8 +1,8 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render ,redirect ,get_object_or_404
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
 from django.contrib import messages
+from booking.models import Specialty
 
 from booking.models import Appointment, WorkingHours
 from accounts.models import Profile
@@ -74,6 +74,7 @@ class DoctorPanel(LoginRequiredMixin, TemplateView):
             'appointments': appointments,
             'pending_count': pending_count,
             'hours_dict': hours_dict, 
+            'specialties_list': Specialty.objects.filter(is_active=True),
         }
         return render(request, self.template_name, context)
 
@@ -83,34 +84,54 @@ class DoctorPanel(LoginRequiredMixin, TemplateView):
         except Doctor.DoesNotExist:
             return redirect('panel:panel')
 
-        # Delete old working hours
-        WorkingHours.objects.filter(doctor=doctor).delete()
-        
-        days_mapping = {
-            '0': 5, # Saturday
-            '1': 6, # Sunday
-            '2': 0, # Monday
-            '3': 1, # Tuesday
-            '4': 2, # Wednesday
-            '5': 3, # Thursday
-            '6': 4, # Friday
-        }
-
-        for i in range(7):
-            # Check if day is selected
-            if f'day_{i}' in request.POST:
-                start_time = request.POST.get(f'start_{i}')
-                end_time = request.POST.get(f'end_{i}')
-                capacity = request.POST.get(f'capacity_{i}', 10)
+        # Handle profile update
+        if 'update_profile' in request.POST:
+            doctor.first_name = request.POST.get('first_name', doctor.first_name)
+            doctor.last_name = request.POST.get('last_name', doctor.last_name)
+            specialty_id = request.POST.get('specialty')
+            if specialty_id:
+                doctor.specialty_id = specialty_id
                 
-                if start_time and end_time:
-                    WorkingHours.objects.create(
-                        doctor=doctor,
-                        day_of_week=days_mapping[str(i)],
-                        start_time=start_time,
-                        end_time=end_time,
-                        capacity=capacity
-                    )
+            doctor.bio = request.POST.get('bio', doctor.bio)
+            doctor.address = request.POST.get('address', doctor.address)
+            
+            if request.FILES.get('image'):
+                doctor.image = request.FILES.get('image')
+                
+            doctor.save()
+            messages.success(request, "پروفایل با موفقیت به‌روزرسانی شد.")
+            return redirect('panel:doctor_panel')
 
-        messages.success(request, "برنامه کاری با موفقیت ذخیره شد.")
-        return redirect('panel:doctor_panel')
+        # Handle working hours update
+        if 'update_schedule' in request.POST:
+            WorkingHours.objects.filter(doctor=doctor).delete()
+
+            days_mapping = {
+                '0': 5, # Saturday
+                '1': 6, # Sunday
+                '2': 0, # Monday
+                '3': 1, # Tuesday
+                '4': 2, # Wednesday
+                '5': 3, # Thursday
+                '6': 4, # Friday
+            }
+
+            for i in range(7):
+                if f'day_{i}' in request.POST:
+                    start_time = request.POST.get(f'start_{i}')
+                    end_time = request.POST.get(f'end_{i}')
+                    capacity = request.POST.get(f'capacity_{i}', 10)
+                    
+                    if start_time and end_time:
+                        WorkingHours.objects.create(
+                            doctor=doctor,
+                            day_of_week=days_mapping[str(i)],
+                            start_time=start_time,
+                            end_time=end_time,
+                            capacity=capacity
+                        )
+
+            messages.success(request, "برنامه کاری با موفقیت ذخیره شد.")
+            return redirect('panel:doctor_panel')
+
+        
