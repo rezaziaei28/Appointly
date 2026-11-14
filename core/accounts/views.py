@@ -4,8 +4,10 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.utils import timezone
 from datetime import timedelta
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import OTP, User, Profile
+from booking.models import Doctor, Specialty
 # Create your views here.
 
 
@@ -161,3 +163,39 @@ class DoctorVerifyView(TemplateView):
 
         # otherwise complete doctor profile first
         return redirect('accounts:doctor_register')
+
+class DoctorRegisterView(LoginRequiredMixin, TemplateView):
+    template_name = 'accounts/doctor_register.html'
+    login_url = 'accounts:doctor_login'
+
+    def get(self, request, *args, **kwargs):
+        # already a doctor? go to dashboard
+        if hasattr(request.user, 'doctor'):
+            return redirect('panel:doctor_panel')
+        specialties = Specialty.objects.filter(is_active=True)
+        return render(request, self.template_name, {'specialties': specialties})
+
+    def post(self, request, *args, **kwargs):
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        specialty_id = request.POST.get('specialty')
+        address = request.POST.get('address')
+        visit_fee = request.POST.get('visit_fee', 0)
+
+        if not first_name or not last_name:
+            messages.error(request, "First name and last name are required.")
+            return render(request, self.template_name, {'specialties': Specialty.objects.filter(is_active=True)})
+
+        # create doctor profile
+        Doctor.objects.create(
+            user=request.user,
+            first_name=first_name,
+            last_name=last_name,
+            specialty_id=specialty_id or None,
+            address=address or '',
+            visit_fee=visit_fee or 0,
+            is_active=True,
+        )
+
+        messages.success(request, "Doctor profile completed successfully.")
+        return redirect('panel:doctor_panel')

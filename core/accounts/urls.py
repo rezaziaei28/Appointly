@@ -11,4 +11,5 @@ urlpatterns = [
     path('welcome/', RoleSelectionView.as_view(), name='role_selection'),
     path('doctor-login/', DoctorLoginView.as_view(), name='doctor_login'),
     path('doctor-verify/', DoctorVerifyView.as_view(), name='doctor_verify'),
+    path('doctor-register/', DoctorRegisterView.as_view(), name='doctor_register'),
 ]
