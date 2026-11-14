@@ -115,13 +115,6 @@ class DoctorLoginView(TemplateView):
             messages.error(request, "Please enter a valid 11-digit phone number.")
             return render(request, self.template_name)
 
-        # check if phone belongs to a doctor
-        doctor_user = User.objects.filter(phone_number=phone_number, is_doctor=True).first()
-
-        if not doctor_user:
-            messages.error(request, "No doctor found with this phone number.")
-            return render(request, self.template_name)
-
         # generate and save otp
         otp = OTP.generate_code(phone_number)
 
@@ -129,3 +122,42 @@ class DoctorLoginView(TemplateView):
             'phone_number': phone_number,
             'otp': otp.code,
         })
+
+class DoctorVerifyView(TemplateView):
+    template_name = 'accounts/doctor_verify.html'
+
+    def post(self, request):
+        phone_number = request.POST.get('phone_number')
+        otp_digits = request.POST.getlist('otp')
+        otp_code = "".join(otp_digits)
+
+        if not phone_number or len(otp_code) != 6:
+            messages.error(request, "Invalid verification code.")
+            return render(request, self.template_name, {'phone_number': phone_number})
+
+        try:
+            otp_obj = OTP.objects.get(phone_number=phone_number, code=otp_code, is_used=False)
+        except OTP.DoesNotExist:
+            messages.error(request, "Incorrect verification code.")
+            return render(request, self.template_name, {'phone_number': phone_number})
+
+        time_threshold = timezone.now() - timedelta(minutes=2)
+        if otp_obj.created_at < time_threshold:
+            otp_obj.delete()
+            messages.error(request, "Verification code has expired.")
+            return render(request, self.template_name, {'phone_number': phone_number})
+
+        # get or create user
+        doctor_user, created = User.objects.get_or_create(phone_number=phone_number)
+
+        otp_obj.is_used = True
+        otp_obj.save()
+
+        login(request, doctor_user, backend='django.contrib.auth.backends.ModelBackend')
+
+        # if doctor profile already exists, go to dashboard
+        if hasattr(doctor_user, 'doctor'):
+            return redirect('panel:doctor_panel')
+
+        # otherwise complete doctor profile first
+        return redirect('accounts:doctor_register')
