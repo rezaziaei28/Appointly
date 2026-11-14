@@ -101,3 +101,31 @@ class LogoutView(TemplateView):
     def get(self, request, *args, **kwargs):
         logout(request)
         return redirect('accounts:login')
+
+class RoleSelectionView(TemplateView):
+    template_name = 'accounts/role_selection.html'
+
+class DoctorLoginView(TemplateView):
+    template_name = 'accounts/doctor_login.html'
+
+    def post(self, request):
+        phone_number = request.POST.get('phone')
+
+        if not phone_number or len(phone_number) != 11:
+            messages.error(request, "Please enter a valid 11-digit phone number.")
+            return render(request, self.template_name)
+
+        # check if phone belongs to a doctor
+        doctor_user = User.objects.filter(phone_number=phone_number, is_doctor=True).first()
+
+        if not doctor_user:
+            messages.error(request, "No doctor found with this phone number.")
+            return render(request, self.template_name)
+
+        # generate and save otp
+        otp = OTP.generate_code(phone_number)
+
+        return render(request, 'accounts/doctor_verify.html', {
+            'phone_number': phone_number,
+            'otp': otp.code,
+        })
