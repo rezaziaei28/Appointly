@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 import random
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 # Create your models here.
 
 class CustomUserManager(BaseUserManager):
@@ -73,3 +75,10 @@ class OTP(models.Model):
         cls.objects.filter(phone_number=phone_number, is_used=False).delete()
         
         return cls.objects.create(phone_number=phone_number, code=code)
+
+
+# --- Signals ---
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
