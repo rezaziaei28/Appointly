@@ -135,4 +135,7 @@ class DoctorPanel(LoginRequiredMixin, TemplateView):
             messages.success(request, "برنامه کاری با موفقیت ذخیره شد.")
             return redirect('panel:doctor_panel')
 
+        # fallback: redirect back if no form matched
+        return redirect('panel:doctor_panel') 
+
         
