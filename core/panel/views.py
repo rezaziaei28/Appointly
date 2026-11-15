@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from booking.models import Specialty
+from datetime import date, timedelta
 
 from booking.models import Appointment, WorkingHours
 from accounts.models import Profile
@@ -58,14 +59,22 @@ class DoctorPanel(LoginRequiredMixin, TemplateView):
             messages.error(request, "شما دسترسی به پنل پزشکان ندارید.")
             return redirect('panel:panel')
 
-        # Get appointments for this specific doctor
-        appointments = Appointment.objects.filter(doctor=doctor).order_by('-date', '-time')
+        # Show only upcoming appointments in the next 30 days
+        today = date.today()
+        next_month = today + timedelta(days=30)
+
+        appointments = Appointment.objects.filter(
+            doctor=doctor,
+            date__gte=today,
+            date__lte=next_month
+        ).order_by('date', 'time')
         
         # Count pending appointments
         pending_count = appointments.filter(status='pending').count()
 
         # Get working hours for the doctor to show in the form
         working_hours = WorkingHours.objects.filter(doctor=doctor)
+        
         # Create a dictionary to easily access working hours by day in template
         hours_dict = {wh.day_of_week: wh for wh in working_hours}
 
