@@ -1,173 +1,123 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دکتر {{ doctor.first_name }} {{ doctor.last_name }} | رزرو نوبت</title>
 
-    <script src="js/config.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
 
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
+{% block content %}
+<!-- ==================== BREADCRUMB ==================== -->
+<div class="max-w-4xl mx-auto w-full px-4 sm:px-6 pt-6 pb-2">
+    <nav class="inline-flex items-center flex-wrap gap-2 sm:gap-3 text-xs sm:text-sm font-medium bg-white dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700 shadow-sm shadow-slate-200/50 dark:shadow-slate-900/50 rounded-2xl px-4 py-2.5 backdrop-blur-sm transition-colors">
+        
+        <!-- Home -->
+        <a href="{% url 'booking:home' %}" class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            <span class="hidden sm:inline">خانه</span>
+        </a>
+        
+        <svg class="w-3.5 h-3.5 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        
+        <!-- Doctors List -->
+        <a href="{% url 'booking:doctor_list' %}" class="text-slate-500 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+            پزشکان
+        </a>
+        
+        <svg class="w-3.5 h-3.5 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        
+        <!-- Doctor Name -->
+        <a href="{% url 'booking:doctor_detail' pk=doctor.id %}" class="text-slate-500 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 transition-colors truncate max-w-[150px] sm:max-w-xs">
+            دکتر {{ doctor.first_name }} {{ doctor.last_name }}
+        </a>
+        
+        <svg class="w-3.5 h-3.5 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        
+        <!-- Current Page -->
+        <span class="flex items-center gap-1 text-teal-600 dark:text-teal-400 font-bold bg-teal-50 dark:bg-teal-500/10 px-2.5 py-1 rounded-lg">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            رزرو نوبت
+        </span>
 
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+    </nav>
+</div>
+<!-- ==================== MAIN ==================== -->
+<main class="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 py-6">
 
-    <!-- ==================== HEADER ==================== -->
-    <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
-
-            <a href="index.html" class="flex items-center gap-2 shrink-0">
-                <div class="w-10 h-10 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-xl flex items-center justify-center text-white text-xl shadow-md shadow-teal-200 dark:shadow-teal-900/50">
-                    🏥
-                </div>
-                <div class="hidden sm:block">
-                    <p class="font-bold leading-tight">رزرو نوبت</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-tight">سیستم آنلاین پزشکان</p>
-                </div>
-            </a>
-
-            <nav class="hidden lg:flex items-center gap-1 text-sm font-medium">
-                <a href="index.html" class="px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">خانه</a>
-                <a href="index.html#doctors" class="px-3 py-2 rounded-lg text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-500/10">پزشکان</a>
-                <a href="#" class="px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">تخصص‌ها</a>
-                <a href="#" class="px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">درباره ما</a>
-                <a href="#" class="px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">تماس</a>
-            </nav>
-
-            <div class="flex items-center gap-2">
-                <button id="themeToggle" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition text-lg">
-                    <span class="dark:hidden">🌙</span>
-                    <span class="hidden dark:inline">☀️</span>
-                </button>
-
-                <a href="#" class="hidden sm:inline-flex items-center gap-1 bg-gradient-to-l from-teal-500 to-cyan-500 text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
-                    ورود
-                </a>
-
-                <button id="menuBtn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
-            </div>
+    <!-- Doctor mini card -->
+    <div class="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm mb-6 flex items-center gap-4">
+        <img src="{{ doctor.image.url }}"
+                alt="دکتر {{ doctor.first_name }} {{ doctor.last_name }} "
+                class="w-16 h-16 rounded-2xl object-cover object-top">
+        <div class="flex-1">
+            <p class="font-bold">دکتر {{ doctor.first_name }} {{ doctor.last_name }}</p>
+            <p class="text-sm text-teal-600 dark:text-teal-400 font-semibold">{{ doctor.specialty }}</p>
         </div>
+        <div class="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-xs font-semibold px-2.5 py-1.5 rounded-lg">
 
-        <div id="mobileMenu" class="mobile-menu lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-            <nav class="px-4 py-3 flex flex-col gap-1 text-sm font-medium">
-                <a href="index.html" class="px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">خانه</a>
-                <a href="index.html#doctors" class="px-3 py-2 rounded-lg text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-500/10">پزشکان</a>
-                <a href="#" class="px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">تخصص‌ها</a>
-                <a href="#" class="px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">درباره ما</a>
-                <a href="#" class="px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">تماس</a>
-            </nav>
+            ⭐ ۴.۸
         </div>
-    </header>
-
-    <!-- ==================== BREADCRUMB ==================== -->
-    <div class="max-w-4xl mx-auto w-full px-4 sm:px-6 pt-6">
-        <nav class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-            <a href="index.html" class="hover:text-teal-600 dark:hover:text-teal-400">خانه</a>
-            <span>/</span>
-            <a href="index.html#doctors" class="hover:text-teal-600 dark:hover:text-teal-400">پزشکان</a>
-            <span>/</span>
-            <a href="{% url 'booking:doctor_detail' pk=doctor.id %}" class="hover:text-teal-600 dark:hover:text-teal-400">دکتر {{ doctor.first_name }} {{ doctor.last_name }}</a>
-            <span>/</span>
-            <span class="text-slate-800 dark:text-slate-200 font-medium">رزرو نوبت</span>
-        </nav>
     </div>
 
-    <!-- ==================== MAIN ==================== -->
-    <main class="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 py-6">
-
-        <!-- Doctor mini card -->
-        <div class="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm mb-6 flex items-center gap-4">
-            <img src="{{ doctor.image.url }}"
-                 alt="دکتر {{ doctor.first_name }} {{ doctor.last_name }} "
-                 class="w-16 h-16 rounded-2xl object-cover object-top">
-            <div class="flex-1">
-                <p class="font-bold">دکتر {{ doctor.first_name }} {{ doctor.last_name }}</p>
-                <p class="text-sm text-teal-600 dark:text-teal-400 font-semibold">{{ doctor.specialty }}</p>
+    <!-- DATE SELECTION FORM -->
+    <form method="POST" action="" class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700 shadow-sm mb-6">
+        {% csrf_token %}
+        <h2 class="text-lg font-bold mb-5 flex items-center gap-2">
+            <span>📅</span> ۱. روز مورد نظر رو انتخاب کن
+        </h2>
+        
+        <div class="flex gap-2 overflow-x-auto pb-4 snap-x">
+            {% for date in dates %}
+            <div class="snap-start shrink-0">
+                <input type="radio" name="date" value="{{ date|date:'Y-m-d' }}" id="date-{{ forloop.counter }}" class="peer hidden" {% if not selected_date or selected_date != date|date:'Y-m-d' %}required{% endif %}>
+                <label for="date-{{ forloop.counter }}" class="block w-20 text-center py-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 cursor-pointer transition hover:border-teal-400 dark:hover:border-teal-500 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:border-transparent peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">
+                    <p class="text-[11px] opacity-80">{{ date|date:'D' }}</p>
+                    <p class="text-lg font-bold">{{ date|date:'d' }}</p>
+                    <p class="text-[11px] opacity-80">{{ date|date:'M' }}</p>
+                </label>
             </div>
-            <div class="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-xs font-semibold px-2.5 py-1.5 rounded-lg">
-                ⭐ ۴.۸
-            </div>
+            {% endfor %}
         </div>
+        
+        <button type="submit" class="w-full mt-5 py-3 rounded-xl bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-semibold hover:shadow-lg hover:shadow-teal-200 dark:hover:shadow-teal-900/50 transition">
+            🔍 نمایش ساعت‌های این روز
+        </button>
+    </form>
 
-        <!-- DATE SELECTION FORM -->
-        <form method="POST" action="" class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700 shadow-sm mb-6">
-            {% csrf_token %}
-            <h2 class="text-lg font-bold mb-5 flex items-center gap-2">
-                <span>📅</span> ۱. روز مورد نظر رو انتخاب کن
-            </h2>
-            
-            <div class="flex gap-2 overflow-x-auto pb-4 snap-x">
-                {% for date in dates %}
-                <div class="snap-start shrink-0">
-                    <input type="radio" name="date" value="{{ date|date:'Y-m-d' }}" id="date-{{ forloop.counter }}" class="peer hidden" {% if not selected_date or selected_date != date|date:'Y-m-d' %}required{% endif %}>
-                    <label for="date-{{ forloop.counter }}" class="block w-20 text-center py-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 cursor-pointer transition hover:border-teal-400 dark:hover:border-teal-500 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white peer-checked:border-transparent peer-checked:shadow-lg peer-checked:shadow-teal-200 dark:peer-checked:shadow-teal-900/50">
-                        <p class="text-[11px] opacity-80">{{ date|date:'D' }}</p>
-                        <p class="text-lg font-bold">{{ date|date:'d' }}</p>
-                        <p class="text-[11px] opacity-80">{{ date|date:'M' }}</p>
-                    </label>
+    <!-- TIME SELECTION (Only shows if times exist) -->
+    {% if step == 'time' %}
+    <form method="POST" action="{% url 'booking:confirm_appointment' pk=doctor.id %}" class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700 shadow-sm">
+        {% csrf_token %}
+        <input type="hidden" name="date" value="{{ selected_date }}">
+        
+        <h2 class="text-lg font-bold mb-5 flex items-center gap-2">
+            <span>⏰</span> ۲. ساعت مورد نظر رو انتخاب کن
+        </h2>
+
+        {% if times or booked_times %}
+            <div class="grid grid-cols-4 sm:grid-cols-6 gap-2 mb-6">
+                <!-- Available Times -->
+                {% for time in times %}
+                <div>
+                    <input type="radio" name="time" value="{{ time }}" id="time-{{ forloop.counter }}" class="peer hidden" required>
+                    <label for="time-{{ forloop.counter }}" class="block text-center py-2.5 rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 text-sm font-semibold cursor-pointer transition hover:bg-teal-100 dark:hover:bg-teal-500/20 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white" dir="ltr">{{ time }}</label>
+                </div>
+                {% endfor %}
+                
+                <!-- Booked Times -->
+                {% for time in booked_times %}
+                <div>
+                    <span class="block text-center py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-400 text-sm font-semibold line-through cursor-not-allowed" dir="ltr">{{ time }}</span>
                 </div>
                 {% endfor %}
             </div>
-            
-            <button type="submit" class="w-full mt-5 py-3 rounded-xl bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-semibold hover:shadow-lg hover:shadow-teal-200 dark:hover:shadow-teal-900/50 transition">
-                🔍 نمایش ساعت‌های این روز
+
+            <button type="submit" class="w-full bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-bold py-4 rounded-xl hover:shadow-lg hover:shadow-teal-200 dark:hover:shadow-teal-900/50 transition">
+                ✅ تایید و ثبت نوبت
             </button>
-        </form>
-
-        <!-- TIME SELECTION (Only shows if times exist) -->
-        {% if step == 'time' %}
-        <form method="POST" action="{% url 'booking:confirm_appointment' pk=doctor.id %}" class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700 shadow-sm">
-            {% csrf_token %}
-            <input type="hidden" name="date" value="{{ selected_date }}">
-            
-            <h2 class="text-lg font-bold mb-5 flex items-center gap-2">
-                <span>⏰</span> ۲. ساعت مورد نظر رو انتخاب کن
-            </h2>
-
-            {% if times or booked_times %}
-                <div class="grid grid-cols-4 sm:grid-cols-6 gap-2 mb-6">
-                    <!-- Available Times -->
-                    {% for time in times %}
-                    <div>
-                        <input type="radio" name="time" value="{{ time }}" id="time-{{ forloop.counter }}" class="peer hidden" required>
-                        <label for="time-{{ forloop.counter }}" class="block text-center py-2.5 rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 text-sm font-semibold cursor-pointer transition hover:bg-teal-100 dark:hover:bg-teal-500/20 peer-checked:bg-gradient-to-l peer-checked:from-teal-500 peer-checked:to-cyan-500 peer-checked:text-white" dir="ltr">{{ time }}</label>
-                    </div>
-                    {% endfor %}
-                    
-                    <!-- Booked Times -->
-                    {% for time in booked_times %}
-                    <div>
-                        <span class="block text-center py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-400 text-sm font-semibold line-through cursor-not-allowed" dir="ltr">{{ time }}</span>
-                    </div>
-                    {% endfor %}
-                </div>
-
-                <button type="submit" class="w-full bg-gradient-to-l from-teal-500 to-cyan-500 text-white font-bold py-4 rounded-xl hover:shadow-lg hover:shadow-teal-200 dark:hover:shadow-teal-900/50 transition">
-                    ✅ تایید و ثبت نوبت
-                </button>
-            {% else %}
-                <div class="text-center py-8">
-                    <p class="text-slate-500 dark:text-slate-400">در حال حاضر برای این روز نوبتی تعریف نشده است.</p>
-                </div>
-            {% endif %}
-        </form>
+        {% else %}
+            <div class="text-center py-8">
+                <p class="text-slate-500 dark:text-slate-400">در حال حاضر برای این روز نوبتی تعریف نشده است.</p>
+            </div>
         {% endif %}
-    </main>
+    </form>
+    {% endif %}
+</main>
 
-    <!-- ==================== FOOTER ==================== -->
-    <footer class="bg-slate-900 dark:bg-black text-slate-300 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 text-center text-sm text-slate-500">
-            © ۱۴۰۴ رزرو نوبت — تمامی حقوق محفوظ است.
-        </div>
-    </footer>
-
-    <script src="{% static 'js/app.js' %}"></script>
-</body>
-</html>
+{% endblock %}
