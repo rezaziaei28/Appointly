@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from booking.models import Specialty
 from datetime import date, timedelta
+from django.contrib.auth import logout
 
 from booking.models import Appointment, WorkingHours
 from accounts.models import Profile
@@ -147,4 +148,12 @@ class DoctorPanel(LoginRequiredMixin, TemplateView):
         # fallback: redirect back if no form matched
         return redirect('panel:doctor_panel') 
 
-        
+
+class DeleteAccountView(LoginRequiredMixin, TemplateView):
+    login_url = 'accounts:login'
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        logout(request)
+        user.delete() 
+        return redirect('booking:home')
