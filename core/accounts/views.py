@@ -102,7 +102,7 @@ class LogoutView(TemplateView):
     
     def get(self, request, *args, **kwargs):
         logout(request)
-        return redirect('accounts:login')
+        return redirect('booking:home')
 
 class RoleSelectionView(TemplateView):
     template_name = 'accounts/role_selection.html'
