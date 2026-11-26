@@ -37,6 +37,14 @@ class HomeView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['specialties'] = Specialty.objects.filter(is_active=True)[:6]
+        
+        # Dynamic stats for the hero section
+        context['total_doctors'] = Doctor.objects.filter(is_active=True).count()
+        context['total_appointments'] = Appointment.objects.count()
+        
+        # Featured doctor for the side box
+        context['featured_doctor'] = Doctor.objects.filter(is_active=True).first()
+        
         return context
 
 class DoctorDetailView(TemplateView):
