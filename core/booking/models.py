@@ -78,3 +78,15 @@ class Specialty(models.Model):
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
+class Review(models.Model):
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='reviews')
+    patient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField(choices=[(i, i) for i in range(1, 6)])
+    comment = models.TextField()
+    is_displayed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.patient.phone_number} - {self.doctor.last_name} - {self.rating} stars"
+
+    
