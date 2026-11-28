@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q, Value
 from django.db.models.functions import Concat
 
-from .models import Doctor, Appointment, WorkingHours,Specialty
+from .models import Doctor, Appointment, WorkingHours,Specialty,Review
 # Create your views here.
 
 
@@ -192,3 +192,36 @@ class DoctorListView(ListView):
 
 class AboutView(TemplateView):
     template_name = 'booking/about.html'
+
+class DoctorReviewsView(TemplateView):
+    template_name = 'booking/reviews.html'
+
+    def get(self, request, pk, *args, **kwargs):
+        doctor = get_object_or_404(Doctor, pk=pk)
+        reviews = Review.objects.filter(doctor=doctor, is_displayed=True).order_by('-created_at')
+        return render(request, self.template_name, {
+            'doctor': doctor,
+            'reviews': reviews
+        })
+
+class SubmitReviewView(LoginRequiredMixin, TemplateView):
+    login_url = 'accounts:login'
+
+    def post(self, request, pk, *args, **kwargs):
+        doctor = get_object_or_404(Doctor, pk=pk)
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+
+        if not rating or not comment:
+            messages.error(request, "Please provide both rating and comment.")
+            return redirect('booking:doctor_reviews', pk=pk)
+
+        Review.objects.create(
+            doctor=doctor,
+            patient=request.user,
+            rating=rating,
+            comment=comment,
+            is_displayed=False
+        )
+        messages.success(request, "Your review has been submitted and is waiting for approval.")
+        return redirect('booking:doctor_reviews', pk=pk)
