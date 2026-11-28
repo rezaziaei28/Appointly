@@ -11,4 +11,6 @@ urlpatterns = [
     path('booking/<int:pk>/confirm/', ConfirmAppointmentView.as_view(), name='confirm_appointment'),
     path('doctors/', DoctorListView.as_view(), name='doctor_list'),    
     path('about/', AboutView.as_view(), name='about'),
+    path('doctor/<int:pk>/reviews/', DoctorReviewsView.as_view(), name='doctor_reviews'),
+    path('doctor/<int:pk>/submit-review/', SubmitReviewView.as_view(), name='submit_review'),
 ]
