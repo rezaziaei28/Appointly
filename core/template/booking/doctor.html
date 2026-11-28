@@ -133,73 +133,68 @@
                     </a>
                 </div>
 
-                <!-- Reviews section -->
-                <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700 shadow-sm">
-                    <div class="flex items-center justify-between mb-5">
-                        <h2 class="text-lg font-bold flex items-center gap-2">
-                            <span>💬</span> نظرات بیماران
-                        </h2>
-                        <span class="text-xs text-slate-500 dark:text-slate-400">۲۴۰ نظر</span>
+                <!-- Reviews Section -->
+                <div class="mt-10 mb-8 w-full">
+
+                        <!-- 1. Header with wide background -->
+                    <div class="bg-gradient-to-l from-teal-500 to-cyan-500 text-white rounded-2xl px-6 py-5 sm:px-8 sm:py-6 border border-transparent shadow-lg shadow-teal-200 dark:shadow-teal-900/50 mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden">
+                        <!-- Background decoration (optional to make it look cool) -->
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
+                        
+                        <div class="relative z-10">
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-white">تجربه بیماران</h2>
+                            <p class="text-sm text-teal-50 mt-1">نظرات واقعی افرادی که این پزشک را ویزیت کرده‌اند.</p>
+                        </div>
+                        <div class="relative z-10 flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl border border-white/30 shadow-sm shrink-0">
+                            <span class="text-yellow-300 font-bold text-lg">★ {{ avg_rating }}</span>
+                            <span class="text-xs text-white/50">|</span>
+                            <span class="text-sm font-semibold text-white">{{ review_count }} نظر</span>
+                        </div>
                     </div>
 
-                    <div class="space-y-4">
-
-                        <!-- Review 1 -->
-                        <div class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl">
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 text-white flex items-center justify-center font-bold text-sm">ع</div>
-                                    <div>
-                                        <p class="font-bold text-sm">علی محمدی</p>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400">۲ هفته پیش</p>
+                    <!-- 2. Reviews List (Vertical, Rectangular Cards) -->
+                    <div class="flex flex-col gap-4">
+                        {% for review in reviews %}
+                            <!-- Rectangular Card -->
+                            <div class="w-full bg-white dark:bg-slate-800 rounded-2xl p-5 sm:p-6 border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
+                                <!-- Card Header: User info and stars -->
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-500/20 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-sm">
+                                            {{ review.patient.profile.first_name|first|default:"ب" }}
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-slate-800 dark:text-slate-100 text-sm">{{ review.patient.profile.first_name }} {{ review.patient.profile.last_name }}</p>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400">{{ review.created_at|date:"Y/m/d" }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Stars -->
+                                    <div class="flex text-yellow-400 text-base gap-0.5" dir="ltr">
+                                        {% for i in "12345"|make_list %}
+                                            {% if forloop.counter <= review.rating %}★{% else %}<span class="text-slate-200 dark:text-slate-700">★</span>{% endif %}
+                                        {% endfor %}
                                     </div>
                                 </div>
-                                <span class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐</span>
+                                
+                                <!-- Card Body: Comment -->
+                                <p class="text-slate-600 dark:text-slate-300 text-sm leading-7">{{ review.comment }}</p>
                             </div>
-                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-7">
-                                بسیار پزشک دلسوز و حرفه‌ای هستند. توضیحات کامل دادند و کاملاً راضی بودم.
-                            </p>
-                        </div>
-
-                        <!-- Review 2 -->
-                        <div class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl">
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 text-white flex items-center justify-center font-bold text-sm">ز</div>
-                                    <div>
-                                        <p class="font-bold text-sm">زهرا کریمی</p>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400">۱ ماه پیش</p>
-                                    </div>
-                                </div>
-                                <span class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐</span>
+                        {% empty %}
+                            <div class="w-full bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-8 text-center border border-slate-100 dark:border-slate-700 border-dashed">
+                                <p class="text-slate-500 text-sm">هنوز نظری برای این پزشک ثبت نشده است.</p>
                             </div>
-                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-7">
-                                برخورد خیلی خوبی داشتند و با حوصله به سوالاتم جواب دادند. پیشنهاد می‌کنم.
-                            </p>
-                        </div>
-
-                        <!-- Review 3 -->
-                        <div class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl">
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 text-white flex items-center justify-center font-bold text-sm">ر</div>
-                                    <div>
-                                        <p class="font-bold text-sm">رضا نوری</p>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400">۲ ماه پیش</p>
-                                    </div>
-                                </div>
-                                <span class="text-yellow-500 text-sm">⭐⭐⭐⭐</span>
-                            </div>
-                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-7">
-                                متاسفانه کمی معطل شدم ولی در کل راضی بودم و درمان خوبی داشتند.
-                            </p>
-                        </div>
-
+                        {% endfor %}
                     </div>
 
-                    <a href="{% url 'booking:doctor_reviews' doctor.id %}" class="block w-full text-center mt-5 py-3 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl text-sm font-semibold transition text-slate-700 dark:text-slate-200">
-                        مشاهده همه نظرات
-                    </a>
+                    <!-- 3. Centered View All Button -->
+                    <div class="mt-6 flex justify-center">
+                        <a href="{% url 'booking:doctor_reviews' doctor.id %}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-l from-teal-500 to-cyan-500 text-white text-sm font-bold rounded-xl hover:shadow-lg hover:shadow-teal-200 dark:hover:shadow-teal-900/50 transition-all">
+                            <span>مشاهده تمام نظرات ({{ review_count }})</span>
+                            <span>←</span>
+                        </a>
+                    </div>
+
                 </div>
 
             </div>
