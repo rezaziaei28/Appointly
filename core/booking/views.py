@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q, Value
 from django.db.models.functions import Concat
+from django.db.models import Avg
 
 from .models import Doctor, Appointment, WorkingHours,Specialty,Review
 # Create your views here.
@@ -51,9 +52,20 @@ class DoctorDetailView(TemplateView):
     template_name = 'booking/doctor.html'
 
     def get(self, request, pk, *args, **kwargs):
-        # Get the doctor by ID or return 404
         doctor = get_object_or_404(Doctor, pk=pk)
-        context = {"doctor": doctor} 
+        
+        # Get top 3 displayed reviews
+        reviews = doctor.reviews.filter(is_displayed=True).order_by('-created_at')[:3]
+        
+        # Calculate average rating
+        avg_rating = doctor.reviews.filter(is_displayed=True).aggregate(Avg('rating'))['rating__avg']
+        
+        context = {
+            "doctor": doctor,
+            "reviews": reviews,
+            "avg_rating": round(avg_rating, 1) if avg_rating else 0,
+            "review_count": doctor.reviews.filter(is_displayed=True).count(),
+        }
         return render(request, self.template_name, context)
 
     def post(self, request, pk, *args, **kwargs):
